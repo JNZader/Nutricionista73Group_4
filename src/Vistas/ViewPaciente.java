@@ -37,6 +37,7 @@ public class ViewPaciente extends javax.swing.JPanel {
         llenarDatos(paciente);
         jBModificar.setEnabled(true);
         jBGuardar.setEnabled(false);
+        jTID.setEditable(false);
     }
 
     public void llenarDatos(Paciente paciente) {
@@ -340,7 +341,6 @@ public class ViewPaciente extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuardarActionPerformed
-        // TODO add your handling code here:
         Paciente paciente;
         try {
             if (jTNombre.getText().isEmpty() || jTDni.getText().isEmpty() || jTDomicilio.getText().isEmpty() || jTTelefono.getText().isEmpty() || jTPesoActual.getText().isEmpty() || (!jChEstado.isSelected())) {
@@ -362,6 +362,7 @@ public class ViewPaciente extends javax.swing.JPanel {
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "Debe ingresar datos validos");
         }
+        jBLimpiarActionPerformed(evt);
     }//GEN-LAST:event_jBGuardarActionPerformed
 
     private void jBModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBModificarActionPerformed
@@ -383,6 +384,7 @@ public class ViewPaciente extends javax.swing.JPanel {
         }
         jBModificar.setEnabled(false);
         jBGuardar.setEnabled(true);
+        jBLimpiarActionPerformed(evt);
     }//GEN-LAST:event_jBModificarActionPerformed
 
     private void jBSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalirActionPerformed
@@ -401,6 +403,7 @@ public class ViewPaciente extends javax.swing.JPanel {
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "Debe ingresar datos validos");
         }
+        jBLimpiarActionPerformed(evt);
     }//GEN-LAST:event_jBEliminarActionPerformed
 
     private void jBBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBBuscarActionPerformed
@@ -434,7 +437,7 @@ public class ViewPaciente extends javax.swing.JPanel {
 
     private void jBLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBLimpiarActionPerformed
         limpiar();
-        jTID.setEditable(true);
+        jTID.setEditable(false);
         jBGuardar.setEnabled(true);
         jBModificar.setEnabled(false);
         jBEliminar.setEnabled(false);
@@ -544,9 +547,12 @@ public class ViewPaciente extends javax.swing.JPanel {
         jTDni.setText("");
         jTDomicilio.setText("");
         jTTelefono.setText("");
+        ((AbstractDocument) jTPesoActual.getDocument()).setDocumentFilter(null);
         jTPesoActual.setText("");
+        ((AbstractDocument) jTPesoActual.getDocument()).setDocumentFilter(fp);
         jChEstado.setSelected(false);
         jTID.setText("");
+        jTID.setEditable(false);
     }
 
     class FiltraEntrada6 extends DocumentFilter {
