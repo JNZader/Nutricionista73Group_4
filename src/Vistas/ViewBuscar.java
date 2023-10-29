@@ -843,7 +843,7 @@ public class ViewBuscar extends javax.swing.JPanel {
         actualizarBotones();
         limpiarTabla();
     }//GEN-LAST:event_jComboBoxEntidadesItemStateChanged
-
+  
     private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
         entidad = jComboBoxEntidades.getSelectedItem().toString();
         atributo = jComboBoxAtributos.getSelectedItem().toString();
