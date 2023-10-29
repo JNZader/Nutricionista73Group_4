@@ -9,6 +9,7 @@ import Entidades.Dieta;
 import Entidades.DietaComida;
 import Entidades.Horario;
 import Entidades.Paciente;
+import com.toedter.calendar.JTextFieldDateEditor;
 import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -21,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
@@ -30,6 +32,7 @@ public class ViewDieta extends javax.swing.JPanel {
 
     DocumentFilter filtroLetras;
     DocumentFilter filtroNumeros;
+    NumericRangeFilter5 fpf;
 
     private Dieta die;
     private DietaComida dietCom;
@@ -40,8 +43,10 @@ public class ViewDieta extends javax.swing.JPanel {
     public ViewDieta() {
         initComponents();
 
-        filtroNumeros = new FiltraEntrada(FiltraEntrada.SOLO_NUMEROS);
-        filtroLetras = new FiltraEntrada(FiltraEntrada.SOLO_LETRAS);
+        filtroNumeros = new FiltraEntrada5(FiltraEntrada5.SOLO_NUMEROS);
+        filtroLetras = new FiltraEntrada5(FiltraEntrada5.SOLO_LETRAS);
+        fpf = new NumericRangeFilter5();
+
         jbModificar.setEnabled(false);
         jButtonModif.setEnabled(false);
 
@@ -83,6 +88,12 @@ public class ViewDieta extends javax.swing.JPanel {
                 }
             }
         });
+        ((JTextFieldDateEditor) jDChoFeInicial.getDateEditor()).setEditable(false);
+        ((JTextFieldDateEditor) jdatechoFechaFinal.getDateEditor()).setEditable(false);
+
+        ((AbstractDocument) jtnombre.getDocument()).setDocumentFilter(filtroLetras);
+        ((AbstractDocument) jtfPorcion.getDocument()).setDocumentFilter(filtroNumeros);
+        ((AbstractDocument) jtpesofinal.getDocument()).setDocumentFilter(fpf);
     }
 
     public ViewDieta(Dieta dieta) {
@@ -143,7 +154,7 @@ public class ViewDieta extends javax.swing.JPanel {
     }
 
     public void llenarcomboBoxComidas() {
-
+        jComboBoxComidas.removeAllItems();
         ComidaDAO comida = new ComidaDAO();
         ArrayList<Comida> comidas = comida.listarComidas(1);
         jComboBoxComidas.addItem(null);
@@ -168,7 +179,7 @@ public class ViewDieta extends javax.swing.JPanel {
     }
 
     public void comboBoxHorario() {
-
+        jComboBoxHorario.removeAllItems();
         ArrayList<Horario> horario = new ArrayList<>();
         jComboBoxHorario.addItem(null);
         horario.add(Horario.DESAYUNO);
@@ -236,7 +247,11 @@ public class ViewDieta extends javax.swing.JPanel {
             fila[2] = i.getPaciente().getNombre(); // Asegúrate de que la clase Dieta tenga un método getPaciente()
             fila[3] = i.getFechaInicial();
             fila[4] = i.getFechaFinal();
-            fila[5] = i.isEstado();
+            if (i.isEstado()) {
+                fila[5] = "Activo";
+            } else {
+                fila[5] = "Inactivo";
+            }
             fila[6] = i.getPesoFinal();
             fila[7] = i;
 
@@ -272,6 +287,24 @@ public class ViewDieta extends javax.swing.JPanel {
 
         }
         jTablaDetalleDieta.setModel(mode);
+    }
+
+    public void limpiarTodo() {
+        llenarComboBox();
+        llenarcomboBoxComidas();
+        comboBoxHorario();
+        jDChoFeInicial.setDate(null);
+        jdatechoFechaFinal.setDate(null);
+        ((AbstractDocument) jtnombre.getDocument()).setDocumentFilter(null);
+        ((AbstractDocument) jtfPorcion.getDocument()).setDocumentFilter(null);
+        ((AbstractDocument) jtpesofinal.getDocument()).setDocumentFilter(null);
+        jtnombre.setText("");
+        jtpesofinal.setText("");
+        jCbEstado.setSelected(false);
+        jtfPorcion.setText("");
+        ((AbstractDocument) jtnombre.getDocument()).setDocumentFilter(filtroLetras);
+        ((AbstractDocument) jtfPorcion.getDocument()).setDocumentFilter(filtroNumeros);
+        ((AbstractDocument) jtpesofinal.getDocument()).setDocumentFilter(fpf);
     }
 
     @SuppressWarnings("unchecked")
@@ -336,6 +369,12 @@ public class ViewDieta extends javax.swing.JPanel {
         jlFefinal.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jlFefinal.setText("Fecha Final");
 
+        jtnombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtnombreKeyTyped(evt);
+            }
+        });
+
         jBGuardar.setBackground(new java.awt.Color(150, 200, 130));
         jBGuardar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jBGuardar.setForeground(new java.awt.Color(0, 0, 51));
@@ -379,6 +418,12 @@ public class ViewDieta extends javax.swing.JPanel {
         jlPesofinal.setBackground(new java.awt.Color(51, 51, 51));
         jlPesofinal.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jlPesofinal.setText("Peso Final");
+
+        jtpesofinal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtpesofinalKeyTyped(evt);
+            }
+        });
 
         jComboPaciente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -434,6 +479,12 @@ public class ViewDieta extends javax.swing.JPanel {
         jButtonModif.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonModifActionPerformed(evt);
+            }
+        });
+
+        jtfPorcion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfPorcionKeyTyped(evt);
             }
         });
 
@@ -577,7 +628,7 @@ public class ViewDieta extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jComboPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboPacienteActionPerformed
-        llenarComboBox();
+//        llenarComboBox();
     }//GEN-LAST:event_jComboPacienteActionPerformed
 
     private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuardarActionPerformed
@@ -607,7 +658,7 @@ public class ViewDieta extends javax.swing.JPanel {
 
             dietad.insertar(die);
             llenarTablaDietaDisponibles();
-
+            limpiarTodo();
         }
 
 //    }                                         
@@ -679,14 +730,13 @@ public class ViewDieta extends javax.swing.JPanel {
                 DietaComida dietaComida = comidaDie.insertar(new DietaComida(comidas, diet, porcion, horarios, true));
 
                 llenarTablaDetalleDieta(dietaComida);
-//
+                limpiarTodo();
             }
         } catch (NumberFormatException e) {
             e.printStackTrace(System.out);
             JOptionPane.showMessageDialog(null, "Complete la informacion con datos validos",
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
-
     }//GEN-LAST:event_jbAgregarActionPerformed
 
     private void jbEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEliminarActionPerformed
@@ -775,6 +825,7 @@ public class ViewDieta extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Ingresa datos validos");
         }
         jButtonModif.setEnabled(false);
+        limpiarTodo();
     }//GEN-LAST:event_jButtonModifActionPerformed
 
     private void jbModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarActionPerformed
@@ -807,7 +858,53 @@ public class ViewDieta extends javax.swing.JPanel {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
         jbModificar.setEnabled(false);
+        limpiarTodo();
     }//GEN-LAST:event_jbModificarActionPerformed
+
+    private void jtnombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtnombreKeyTyped
+        char c = evt.getKeyChar();
+
+        if (Character.isLetter(c)) {
+            if (jtnombre.getText().length() >= 100) {
+                evt.consume();
+            }
+        }
+        if (Character.isWhitespace(c)) {
+            int length = jtnombre.getText().length();
+            if (length > 0 && jtnombre.getText().charAt(length - 1) == ' ') {
+                evt.consume();
+            }
+        }
+        if (c == '.' && jtnombre.getText().contains(".")) {//controla que solo se pueda ingresar un solo punto
+            evt.consume();
+        }
+
+    }//GEN-LAST:event_jtnombreKeyTyped
+
+    private void jtpesofinalKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtpesofinalKeyTyped
+        char c = evt.getKeyChar();
+        if (Character.isDigit(c)) {
+            String text = jtpesofinal.getText();
+            if (text.isEmpty() || (text.length() == 1 && Character.isDigit(text.charAt(0)))) {
+                if (text.length() >= 11) {
+                    evt.consume();
+                }
+            }
+        }
+        if (c == '.' && jtpesofinal.getText().contains(".")) {//controla que solo se pueda ingresar un solo punto
+            evt.consume();
+        }
+    }//GEN-LAST:event_jtpesofinalKeyTyped
+
+    private void jtfPorcionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfPorcionKeyTyped
+        char c = evt.getKeyChar();
+        if (jtfPorcion.getText().length() >= 5) {
+            evt.consume();
+        }
+        if (c == '.' && jtfPorcion.getText().contains(".")) {//controla que solo se pueda ingresar un solo punto
+            evt.consume();
+        }
+    }//GEN-LAST:event_jtfPorcionKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -843,7 +940,7 @@ public class ViewDieta extends javax.swing.JPanel {
     private javax.swing.JTextField jtpesofinal;
     // End of variables declaration//GEN-END:variables
 
-    class FiltraEntrada extends DocumentFilter {
+    class FiltraEntrada5 extends DocumentFilter {
 
         public static final char SOLO_NUMEROS = 'N';
         public static final char SOLO_LETRAS = 'L';
@@ -854,15 +951,15 @@ public class ViewDieta extends javax.swing.JPanel {
         private int longitudCadena = 0;
         private int longitudActual = 0;
 
-        public FiltraEntrada() {
+        public FiltraEntrada5() {
             tipoEntrada = DEFAULT;
         }
 
-        public FiltraEntrada(char tipoEntrada) {
+        public FiltraEntrada5(char tipoEntrada) {
             this.tipoEntrada = tipoEntrada;
         }
 
-        public FiltraEntrada(char tipoEntrada, int longitudCadena) {
+        public FiltraEntrada5(char tipoEntrada, int longitudCadena) {
             this.tipoEntrada = tipoEntrada;
             this.longitudCadena = longitudCadena;
         }
@@ -935,7 +1032,7 @@ public class ViewDieta extends javax.swing.JPanel {
         }
     }
 
-    class NumericRangeFilter4 extends DocumentFilter {
+    class NumericRangeFilter5 extends DocumentFilter {
 
         @Override
         public void replace(DocumentFilter.FilterBypass fb, int i, int i1, String string, AttributeSet as) throws BadLocationException {
@@ -944,9 +1041,9 @@ public class ViewDieta extends javax.swing.JPanel {
             String nextText = currentText.substring(0, i) + string + currentText.substring(i + i1);//concatena el texto a insertar con el texto acutal
 
             try {
-                int num = Integer.parseInt(nextText);//intenta convertir el texto en numero
+                double num = Double.parseDouble(nextText);//intenta convertir el texto en numero
 
-                if (num >= 1 && num <= 6) {//verifica si el numero esta en el rango de 1 a 6
+                if (num >= 0.0 && num <= 500.0) {//verifica si el numero esta en el rango de 0.0 a 10.0
                     super.replace(fb, i, i1, string, as);
                 } else {
                     //fuera de rango
