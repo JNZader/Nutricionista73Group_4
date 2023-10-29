@@ -24,7 +24,7 @@ public class ViewConsulta extends javax.swing.JPanel {
 
     DefaultTableModel model;
     private Consulta consu;
-    
+
     public ViewConsulta() {
         initComponents();
 
@@ -50,16 +50,17 @@ public class ViewConsulta extends javax.swing.JPanel {
 
     public ViewConsulta(Consulta consulta) {
         this();
-        this.consu=consulta;
+        this.consu = consulta;
+        jBGuargarConsulta.setEnabled(false);
         jBmodificar.setEnabled(true);
 
         llenarDatos();
     }
-    
-    public void llenarDatos(){
-                jTPeso.setText(consu.getPesoActual() + "");
+
+    public void llenarDatos() {
+        jTPeso.setText(consu.getPesoActual() + "");
         jDateChFecha.setDate(Date.valueOf(consu.getFecha()));
-        cargarComboBoxConPaciente(consu.getPaciente());     
+        cargarComboBoxConPaciente(consu.getPaciente());
     }
 
     @SuppressWarnings("unchecked")
@@ -348,6 +349,7 @@ public class ViewConsulta extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Ingresa datos validos");
         }
         jBmodificar.setEnabled(false);
+        jBGuargarConsulta.setEnabled(true);
     }//GEN-LAST:event_jBmodificarActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBGuargarConsulta;
