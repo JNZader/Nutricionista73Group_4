@@ -39,6 +39,9 @@ public class ConsultaDAO {
 
                 consultas.add(consulta);
             }
+            if (consultas.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "No se encontraron consultas en la base de datos.", "Consultas no encontradas", JOptionPane.INFORMATION_MESSAGE);
+            }
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(null, "Error al obtener consultas");
@@ -60,6 +63,9 @@ public class ConsultaDAO {
                     consulta.setFecha(rs.getDate("fecha").toLocalDate());
                     consulta.setPesoActual(rs.getDouble("pesoActual"));
                     consultas.add(consulta);
+                }
+                if (consultas.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "No se encontraron consultas para el paciente.", "Consultas no encontradas", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         } catch (SQLException ex) {
@@ -85,6 +91,8 @@ public class ConsultaDAO {
                     consulta.setPaciente(p);
                     consulta.setFecha(rs.getDate("fecha").toLocalDate());
                     consulta.setPesoActual(rs.getDouble("pesoActual"));
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se encontró una consulta con el ID proporcionado.", "Consulta no encontrada", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         } catch (SQLException ex) {
@@ -208,6 +216,9 @@ public class ConsultaDAO {
                     consulta.setPesoActual(rs.getDouble("pesoActual"));
                     consultas.add(consulta);
                 }
+                if (consultas.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "No se encontraron consultas en la fecha especificada.", "Consultas no encontradas", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
@@ -248,6 +259,9 @@ public class ConsultaDAO {
                     consulta.setFecha(rs.getDate("fecha").toLocalDate());
                     consulta.setPesoActual(rs.getDouble("pesoActual"));
                     consultas.add(consulta);
+                }
+                if (consultas.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "No se encontraron consultas con el peso actual especificado.", "Consultas no encontradas", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         } catch (SQLException ex) {
