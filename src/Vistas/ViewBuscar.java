@@ -14,6 +14,7 @@ import Entidades.Paciente;
 import com.toedter.calendar.JTextFieldDateEditor;
 import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -603,11 +604,11 @@ public class ViewBuscar extends javax.swing.JPanel {
             jButtonEliminar.setEnabled(false);
             jButtonAnular.setEnabled(false);
         }
-        if(jComboBoxEntidades.getSelectedIndex()==2&&jComboBoxAtributos.getSelectedIndex()==1) {
+        if (jComboBoxEntidades.getSelectedIndex() == 2 && jComboBoxAtributos.getSelectedIndex() == 1) {
             jRadioButtonActivo.setEnabled(false);
             jRadioButtonAmbos.setEnabled(false);
             jRadioButtonInactivo.setEnabled(false);
-        }else{
+        } else {
             jRadioButtonActivo.setEnabled(true);
             jRadioButtonAmbos.setEnabled(true);
             jRadioButtonInactivo.setEnabled(true);
@@ -852,301 +853,309 @@ public class ViewBuscar extends javax.swing.JPanel {
         actualizarBotones();
         limpiarTabla();
     }//GEN-LAST:event_jComboBoxEntidadesItemStateChanged
-  
+
     private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
-        entidad = jComboBoxEntidades.getSelectedItem().toString();
-        atributo = jComboBoxAtributos.getSelectedItem().toString();
-        atributoTF = jTextField1.getText();
-        estado = (jRadioButtonActivo.isSelected()) ? 1 : (jRadioButtonInactivo.isSelected()) ? 0 : (jRadioButtonAmbos.isSelected()) ? 3 : -1;
-        if ("".equals(entidad) && "".equals(atributo) && "".equals(atributoTF) && !entidad.isEmpty() && !atributo.isEmpty() && !atributoTF.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Seleccione datos validos");
-        } else {
-            if (entidad.equalsIgnoreCase("Comidas")) {
-                switch (atributo) {
-                    case "ID":
-                        if (atributoTF != null && !atributoTF.isEmpty() && !atributoTF.equalsIgnoreCase("")) {
-                            tf = Integer.parseInt(atributoTF);
+        try {
+            entidad = jComboBoxEntidades.getSelectedItem().toString();
+            atributo = jComboBoxAtributos.getSelectedItem().toString();
+            atributoTF = jTextField1.getText();
+            estado = (jRadioButtonActivo.isSelected()) ? 1 : (jRadioButtonInactivo.isSelected()) ? 0 : (jRadioButtonAmbos.isSelected()) ? 3 : -1;
+            if ("".equals(entidad) && "".equals(atributo) && "".equals(atributoTF) && !entidad.isEmpty() && !atributo.isEmpty() && !atributoTF.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Seleccione datos validos");
+            } else {
+                if (entidad.equalsIgnoreCase("Comidas")) {
+                    switch (atributo) {
+                        case "ID":
+                            if (atributoTF != null && !atributoTF.isEmpty() && !atributoTF.equalsIgnoreCase("")) {
+                                tf = Integer.parseInt(atributoTF);
+                                comidaDAO = new ComidaDAO();
+                                llenarTabla(comidaDAO.buscar(tf, estado));
+                            } else {
+                                comidaDAO = new ComidaDAO();
+                                comidas = comidaDAO.listarComidas(estado);
+                                lista = new ArrayList<>(comidas);
+                                llenarTabla(lista, "Comida");
+                            }
+                            break;
+                        case "Nombre":
+                            if (!jTextField1.getText().isEmpty()) {
+                                comidaDAO = new ComidaDAO();
+                                llenarTabla(comidaDAO.buscarPorNombre(atributoTF, estado));
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Ingrese un nombre a buscar", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                            break;
+                        case "Detalle":
                             comidaDAO = new ComidaDAO();
-                            llenarTabla(comidaDAO.buscar(tf, estado));
-                        } else {
+                            comidas = comidaDAO.buscarPorDetalle(atributoTF, estado);
+                            lista = new ArrayList<>(comidas);
+                            llenarTabla(lista, "Comida");
+                            break;
+                        case "Cantidad de calorias":
+                            if (!jTextField1.getText().isEmpty()) {
+                                comidaDAO = new ComidaDAO();
+                                estado = (jRadioButtonActivo.isSelected()) ? 1 : (jRadioButtonInactivo.isSelected()) ? 0 : (jRadioButtonAmbos.isSelected()) ? -1 : -3;
+                                comidas = comidaDAO.buscarXCantCalorias(Integer.parseInt(jTextField1.getText()), estado);
+                                lista = new ArrayList<>(comidas);
+                                llenarTabla(lista, "Comida");
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Ingrese la cantidad de calorias a buscar", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                            break;
+                        case "Estado":
                             comidaDAO = new ComidaDAO();
                             comidas = comidaDAO.listarComidas(estado);
                             lista = new ArrayList<>(comidas);
                             llenarTabla(lista, "Comida");
-                        }
-                        break;
-                    case "Nombre":
-                        if (!jTextField1.getText().isEmpty()) {
-                            comidaDAO = new ComidaDAO();
-                            llenarTabla(comidaDAO.buscarPorNombre(atributoTF, estado));
-                        } else {
-                            JOptionPane.showMessageDialog(this, "Ingrese un nombre a buscar", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                        break;
-                    case "Detalle":
-                        comidaDAO = new ComidaDAO();
-                        comidas = comidaDAO.buscarPorDetalle(atributoTF, estado);
-                        lista = new ArrayList<>(comidas);
-                        llenarTabla(lista, "Comida");
-                        break;
-                    case "Cantidad de calorias":
-                        if (!jTextField1.getText().isEmpty()) {
-                            comidaDAO = new ComidaDAO();
+                            break;
+                    }
+                } else if (entidad.equalsIgnoreCase("Consultas")) {
+                    switch (atributo) {
+                        case "ID"://id consulta
+                            if (atributoTF != null && !atributoTF.isEmpty() && !atributoTF.equalsIgnoreCase("")) {
+                                tf = Integer.parseInt(atributoTF);
+                                consultaDAO = new ConsultaDAO();
+                                llenarTabla(consultaDAO.buscar(tf));
+                            } else {
+                                consultaDAO = new ConsultaDAO();
+                                consultas = consultaDAO.buscar();
+                                lista = new ArrayList<>(consultas);
+                                llenarTabla(lista, "Consulta");
+                            }
+                            break;
+                        case "Paciente":
+                            consultaDAO = new ConsultaDAO();
+                            consultas = consultaDAO.buscar((Paciente) jComboBoxAtribSelect.getSelectedItem());
+                            lista = new ArrayList<>(consultas);
+                            llenarTabla(lista, "Consulta");
+                            break;
+                        case "Fecha":
+                            consultaDAO = new ConsultaDAO();
                             estado = (jRadioButtonActivo.isSelected()) ? 1 : (jRadioButtonInactivo.isSelected()) ? 0 : (jRadioButtonAmbos.isSelected()) ? -1 : -3;
-                            comidas = comidaDAO.buscarXCantCalorias(Integer.parseInt(jTextField1.getText()), estado);
-                            lista = new ArrayList<>(comidas);
-                            llenarTabla(lista, "Comida");
-                        } else {
-                            JOptionPane.showMessageDialog(this, "Ingrese la cantidad de calorias a buscar", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                        break;
-                    case "Estado":
-                        comidaDAO = new ComidaDAO();
-                        comidas = comidaDAO.listarComidas(estado);
-                        lista = new ArrayList<>(comidas);
-                        llenarTabla(lista, "Comida");
-                        break;
-                }
-            } else if (entidad.equalsIgnoreCase("Consultas")) {
-                switch (atributo) {
-                    case "ID"://id consulta
-                        if (atributoTF != null && !atributoTF.isEmpty() && !atributoTF.equalsIgnoreCase("")) {
-                            tf = Integer.parseInt(atributoTF);
-                            consultaDAO = new ConsultaDAO();
-                            llenarTabla(consultaDAO.buscar(tf));
-                        } else {
-                            consultaDAO = new ConsultaDAO();
-                            consultas = consultaDAO.buscar();
-                            lista = new ArrayList<>(consultas);
-                            llenarTabla(lista, "Consulta");
-                        }
-                        break;
-                    case "Paciente":
-                        consultaDAO = new ConsultaDAO();
-                        consultas = consultaDAO.buscar((Paciente) jComboBoxAtribSelect.getSelectedItem());
-                        lista = new ArrayList<>(consultas);
-                        llenarTabla(lista, "Consulta");
-                        break;
-                    case "Fecha":
-                        consultaDAO = new ConsultaDAO();
-                        estado = (jRadioButtonActivo.isSelected()) ? 1 : (jRadioButtonInactivo.isSelected()) ? 0 : (jRadioButtonAmbos.isSelected()) ? -1 : -3;
-                        if (jDateChooser1.getDate() != null) {
-                            LocalDate fecha = jDateChooser1.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                            consultas = consultaDAO.buscarPorFecha(fecha, estado);
-                            lista = new ArrayList<>(consultas);
-                            llenarTabla(lista, "Consulta");
-                        } else {
-                            JOptionPane.showMessageDialog(this, "Ingrese una fecha valida", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                        break;
-                    case "Peso actual":
-                        if (!jTextField1.getText().isEmpty()) {
-                            double tfp = Double.parseDouble(atributoTF);
-                            consultaDAO = new ConsultaDAO();
-                            estado = (jRadioButtonActivo.isSelected()) ? 1 : (jRadioButtonInactivo.isSelected()) ? 0 : (jRadioButtonAmbos.isSelected()) ? -1 : 0;
-                            consultas = consultaDAO.buscarPorPesoActual(tfp, estado);
-                            lista = new ArrayList<>(consultas);
-                            llenarTabla(lista, "Consulta");
-                        } else {
-                            JOptionPane.showMessageDialog(this, "Ingrese el peso a buscar", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                        break;
-                }
-            } else if (entidad.equalsIgnoreCase("Tratamientos")) {
-                switch (atributo) {
-                    case "ID":
-                        if (atributoTF != null && !atributoTF.isEmpty() && !atributoTF.equalsIgnoreCase("")) {
-                            tf = Integer.parseInt(atributoTF);
+                            if (jDateChooser1.getDate() != null) {
+                                LocalDate fecha = jDateChooser1.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                                consultas = consultaDAO.buscarPorFecha(fecha, estado);
+                                lista = new ArrayList<>(consultas);
+                                llenarTabla(lista, "Consulta");
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Ingrese una fecha valida", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                            break;
+                        case "Peso actual":
+                            if (!jTextField1.getText().isEmpty()) {
+                                double tfp = Double.parseDouble(atributoTF);
+                                consultaDAO = new ConsultaDAO();
+                                estado = (jRadioButtonActivo.isSelected()) ? 1 : (jRadioButtonInactivo.isSelected()) ? 0 : (jRadioButtonAmbos.isSelected()) ? -1 : 0;
+                                consultas = consultaDAO.buscarPorPesoActual(tfp, estado);
+                                lista = new ArrayList<>(consultas);
+                                llenarTabla(lista, "Consulta");
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Ingrese el peso a buscar", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                            break;
+                    }
+                } else if (entidad.equalsIgnoreCase("Tratamientos")) {
+                    switch (atributo) {
+                        case "ID":
+                            if (atributoTF != null && !atributoTF.isEmpty() && !atributoTF.equalsIgnoreCase("")) {
+                                tf = Integer.parseInt(atributoTF);
+                                dietaDAO = new DietaDAO();
+                                llenarTabla(dietaDAO.buscarPorId(tf, estado));
+                            } else {
+                                dietaDAO = new DietaDAO();
+                                dietas = dietaDAO.buscar(estado);
+                                lista = new ArrayList<>(dietas);
+                                llenarTabla(lista, "Dieta");
+                            }
+                            break;
+                        case "Nombre":
                             dietaDAO = new DietaDAO();
-                            llenarTabla(dietaDAO.buscarPorId(tf, estado));
-                        } else {
+                            dietas = dietaDAO.buscarDietasPorNombre(atributoTF, estado);
+                            lista = new ArrayList<>(dietas);
+                            llenarTabla(lista, "Dieta");
+                            break;
+                        case "Paciente":
+                            Paciente p = (Paciente) jComboBoxAtribSelect.getSelectedItem();
+                            dietaDAO = new DietaDAO();
+                            llenarTabla(new ArrayList<>(dietaDAO.buscarDietasPorPaciente(p.getIdPaciente(), estado)), "Dieta");
+                            break;
+                        case "Fecha Inicial"://falta x modif vista
+                            dietaDAO = new DietaDAO();
+                            if (jDateChooser1.getDate() != null) {
+                                LocalDate fechaInicial = jDateChooser1.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                                dietas = dietaDAO.buscarDietasPorFecha(fechaInicial, estado, true);
+                                lista = new ArrayList<>(dietas);
+                                llenarTabla(lista, "Dieta");
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Ingrese una fecha valida", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                            break;
+                        case "Fecha Final":
+                            dietaDAO = new DietaDAO();
+                            if (jDateChooser1.getDate() != null) {
+                                LocalDate fechaFinal = jDateChooser1.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                                dietas = dietaDAO.buscarDietasPorFecha(fechaFinal, estado, false);
+                                lista = new ArrayList<>(dietas);
+                                llenarTabla(lista, "Dieta");
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Ingrese una fecha valida", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                            break;
+                        case "Peso Final":
+                            dietaDAO = new DietaDAO();
+                            if (!jTextField1.getText().isEmpty()) {
+                                estado = (jRadioButtonActivo.isSelected()) ? 1 : (jRadioButtonInactivo.isSelected()) ? 0 : (jRadioButtonAmbos.isSelected()) ? -1 : 0;
+                                double tfp = Double.parseDouble(atributoTF);
+                                dietas = dietaDAO.buscarDietasPorPesoFinal(tfp, estado);
+                                lista = new ArrayList<>(dietas);
+                                llenarTabla(lista, "Dieta");
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Ingrese el peso final a buscar", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                            break;
+                        case "Estado":
                             dietaDAO = new DietaDAO();
                             dietas = dietaDAO.buscar(estado);
                             lista = new ArrayList<>(dietas);
                             llenarTabla(lista, "Dieta");
-                        }
-                        break;
-                    case "Nombre":
-                        dietaDAO = new DietaDAO();
-                        dietas = dietaDAO.buscarDietasPorNombre(atributoTF, estado);
-                        lista = new ArrayList<>(dietas);
-                        llenarTabla(lista, "Dieta");
-                        break;
-                    case "Paciente":
-                        Paciente p = (Paciente) jComboBoxAtribSelect.getSelectedItem();
-                        dietaDAO = new DietaDAO();
-                        llenarTabla(new ArrayList<>(dietaDAO.buscarDietasPorPaciente(p.getIdPaciente(), estado)), "Dieta");
-                        break;
-                    case "Fecha Inicial"://falta x modif vista
-                        dietaDAO = new DietaDAO();
-                        if (jDateChooser1.getDate() != null) {
-                            LocalDate fechaInicial = jDateChooser1.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                            dietas = dietaDAO.buscarDietasPorFecha(fechaInicial, estado, true);
-                            lista = new ArrayList<>(dietas);
-                            llenarTabla(lista, "Dieta");
-                        } else {
-                            JOptionPane.showMessageDialog(this, "Ingrese una fecha valida", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                        break;
-                    case "Fecha Final":
-                        dietaDAO = new DietaDAO();
-                        if (jDateChooser1.getDate() != null) {
-                            LocalDate fechaFinal = jDateChooser1.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                            dietas = dietaDAO.buscarDietasPorFecha(fechaFinal, estado, false);
-                            lista = new ArrayList<>(dietas);
-                            llenarTabla(lista, "Dieta");
-                        } else {
-                            JOptionPane.showMessageDialog(this, "Ingrese una fecha valida", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                        break;
-                    case "Peso Final":
-                        dietaDAO = new DietaDAO();
-                        if (!jTextField1.getText().isEmpty()) {
-                            estado = (jRadioButtonActivo.isSelected()) ? 1 : (jRadioButtonInactivo.isSelected()) ? 0 : (jRadioButtonAmbos.isSelected()) ? -1 : 0;
-                            double tfp = Double.parseDouble(atributoTF);
-                            dietas = dietaDAO.buscarDietasPorPesoFinal(tfp, estado);
-                            lista = new ArrayList<>(dietas);
-                            llenarTabla(lista, "Dieta");
-                        } else {
-                            JOptionPane.showMessageDialog(this, "Ingrese el peso final a buscar", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                        break;
-                    case "Estado":
-                        dietaDAO = new DietaDAO();
-                        dietas = dietaDAO.buscar(estado);
-                        lista = new ArrayList<>(dietas);
-                        llenarTabla(lista, "Dieta");
-                        break;
-                }
-            } else if (entidad.equalsIgnoreCase("Pacientes")) {
-                switch (atributo) {
-                    case "ID":
-                        if (atributoTF != null && !atributoTF.isEmpty() && !atributoTF.equalsIgnoreCase("")) {
-                            tf = Integer.parseInt(atributoTF);
-                            pacienteDAO = new PacienteDAO();
-                            llenarTabla(pacienteDAO.buscarPaciente(tf, estado));
-                        } else {
+                            break;
+                    }
+                } else if (entidad.equalsIgnoreCase("Pacientes")) {
+                    switch (atributo) {
+                        case "ID":
+                            if (atributoTF != null && !atributoTF.isEmpty() && !atributoTF.equalsIgnoreCase("")) {
+                                tf = Integer.parseInt(atributoTF);
+                                pacienteDAO = new PacienteDAO();
+                                llenarTabla(pacienteDAO.buscarPaciente(tf, estado));
+                            } else {
+                                pacienteDAO = new PacienteDAO();
+                                pacientes = pacienteDAO.listarPaciente(estado);
+                                lista = new ArrayList<>(pacientes);
+                                llenarTabla(lista, "Paciente");
+                            }
+                            break;
+                        case "Nombre Completo":
+                            if (atributoTF != null && !atributoTF.isEmpty() && !atributoTF.equalsIgnoreCase("")) {
+                                pacienteDAO = new PacienteDAO();
+                                pacientes = pacienteDAO.buscarPacientesPorNombre(atributoTF, estado);
+                                lista = new ArrayList<>(pacientes);
+                                llenarTabla(lista, "Paciente");
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Ingrese un nombre a buscar", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                            break;
+                        case "Domicilio":
+                            if (atributoTF != null && !atributoTF.isEmpty() && !atributoTF.equalsIgnoreCase("")) {
+                                pacienteDAO = new PacienteDAO();
+                                pacientes = pacienteDAO.buscarPacientesPorDomicilio(atributoTF, estado);
+                                lista = new ArrayList<>(pacientes);
+                                llenarTabla(lista, "Paciente");
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Ingrese un domicilio a buscar", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                            break;
+                        case "DNI":
+                            if (atributoTF != null && !atributoTF.isEmpty() && !atributoTF.equalsIgnoreCase("")) {
+                                tf = Integer.parseInt(atributoTF);
+                                pacienteDAO = new PacienteDAO();
+                                llenarTabla(pacienteDAO.buscarPacientePorDni(tf, estado));
+                            }
+                            break;
+                        case "Peso actual":
+                            if (!jTextField1.getText().isEmpty()) {
+                                double tfp = Double.parseDouble(atributoTF);
+                                pacienteDAO = new PacienteDAO();
+                                estado = (jRadioButtonActivo.isSelected()) ? 1 : (jRadioButtonInactivo.isSelected()) ? 0 : (jRadioButtonAmbos.isSelected()) ? -1 : 0;
+                                pacientes = pacienteDAO.buscarPacientesPorPesoActual(tfp, estado);
+                                lista = new ArrayList<>(pacientes);
+                                llenarTabla(lista, "Paciente");
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Ingrese el peso actual a buscar", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                            break;
+                        case "Estado":
                             pacienteDAO = new PacienteDAO();
                             pacientes = pacienteDAO.listarPaciente(estado);
                             lista = new ArrayList<>(pacientes);
                             llenarTabla(lista, "Paciente");
-                        }
-                        break;
-                    case "Nombre Completo":
-                        if (atributoTF != null && !atributoTF.isEmpty() && !atributoTF.equalsIgnoreCase("")) {
-                            pacienteDAO = new PacienteDAO();
-                            pacientes = pacienteDAO.buscarPacientesPorNombre(atributoTF, estado);
-                            lista = new ArrayList<>(pacientes);
-                            llenarTabla(lista, "Paciente");
-                        } else {
-                            JOptionPane.showMessageDialog(this, "Ingrese un nombre a buscar", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                        break;
-                    case "Domicilio":
-                        if (atributoTF != null && !atributoTF.isEmpty() && !atributoTF.equalsIgnoreCase("")) {
-                            pacienteDAO = new PacienteDAO();
-                            pacientes = pacienteDAO.buscarPacientesPorDomicilio(atributoTF, estado);
-                            lista = new ArrayList<>(pacientes);
-                            llenarTabla(lista, "Paciente");
-                        } else {
-                            JOptionPane.showMessageDialog(this, "Ingrese un domicilio a buscar", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                        break;
-                    case "DNI":
-                        if (atributoTF != null && !atributoTF.isEmpty() && !atributoTF.equalsIgnoreCase("")) {
-                            tf = Integer.parseInt(atributoTF);
-                            pacienteDAO = new PacienteDAO();
-                            llenarTabla(pacienteDAO.buscarPacientePorDni(tf, estado));
-                        }
-                        break;
-                    case "Peso actual":
-                        if (!jTextField1.getText().isEmpty()) {
-                            double tfp = Double.parseDouble(atributoTF);
-                            pacienteDAO = new PacienteDAO();
-                            estado = (jRadioButtonActivo.isSelected()) ? 1 : (jRadioButtonInactivo.isSelected()) ? 0 : (jRadioButtonAmbos.isSelected()) ? -1 : 0;
-                            pacientes = pacienteDAO.buscarPacientesPorPesoActual(tfp, estado);
-                            lista = new ArrayList<>(pacientes);
-                            llenarTabla(lista, "Paciente");
-                        } else {
-                            JOptionPane.showMessageDialog(this, "Ingrese el peso actual a buscar", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                        break;
-                    case "Estado":
-                        pacienteDAO = new PacienteDAO();
-                        pacientes = pacienteDAO.listarPaciente(estado);
-                        lista = new ArrayList<>(pacientes);
-                        llenarTabla(lista, "Paciente");
-                        break;
-                    case "Celular":
-                        if (atributoTF != null && !atributoTF.isEmpty() && !atributoTF.equalsIgnoreCase("")) {
-                            tf = Integer.parseInt(atributoTF);
-                            pacienteDAO = new PacienteDAO();
-                            pacientes = pacienteDAO.buscarPacientesPorCelular(tf, estado);
-                            lista = new ArrayList<>(pacientes);
-                            llenarTabla(lista, "Paciente");
-                        } else {
-                            pacienteDAO = new PacienteDAO();
-                            pacientes = pacienteDAO.listarPaciente(estado);
-                            lista = new ArrayList<>(pacientes);
-                            llenarTabla(lista, "Paciente");
-                        }
-                        break;
-                }
-            } else if (entidad.equalsIgnoreCase("Dietas")) {
-                switch (atributo) {
-                    case "ID":
-                        if (atributoTF != null && !atributoTF.isEmpty() && !atributoTF.equalsIgnoreCase("")) {
-                            tf = Integer.parseInt(atributoTF);
+                            break;
+                        case "Celular":
+                            if (atributoTF != null && !atributoTF.isEmpty() && !atributoTF.equalsIgnoreCase("")) {
+                                tf = Integer.parseInt(atributoTF);
+                                pacienteDAO = new PacienteDAO();
+                                pacientes = pacienteDAO.buscarPacientesPorCelular(tf, estado);
+                                lista = new ArrayList<>(pacientes);
+                                llenarTabla(lista, "Paciente");
+                            } else {
+                                pacienteDAO = new PacienteDAO();
+                                pacientes = pacienteDAO.listarPaciente(estado);
+                                lista = new ArrayList<>(pacientes);
+                                llenarTabla(lista, "Paciente");
+                            }
+                            break;
+                    }
+                } else if (entidad.equalsIgnoreCase("Dietas")) {
+                    switch (atributo) {
+                        case "ID":
+                            if (atributoTF != null && !atributoTF.isEmpty() && !atributoTF.equalsIgnoreCase("")) {
+                                tf = Integer.parseInt(atributoTF);
+                                dietaComidaDAO = new DietaComidaDAO();
+                                llenarTabla(dietaComidaDAO.buscarPorId(tf, estado));
+                            } else {
+                                dietaComidaDAO = new DietaComidaDAO();
+                                dietaComidas = dietaComidaDAO.buscar(estado);
+                                lista = new ArrayList<>(dietaComidas);
+                                llenarTabla(lista, "DietaComida");
+                            }
+                            break;
+                        case "Comida":
+                            Comida c = (Comida) jComboBoxAtribSelect.getSelectedItem();
                             dietaComidaDAO = new DietaComidaDAO();
-                            llenarTabla(dietaComidaDAO.buscarPorId(tf, estado));
-                        } else {
+                            dietaComidas = dietaComidaDAO.buscarPorIdComida(c.getIdComida(), estado);
+                            lista = new ArrayList<>(dietaComidas);
+                            llenarTabla(lista, "DietaComida");
+                            break;
+                        case "Tratamiento":
+                            Dieta d = (Dieta) jComboBoxAtribSelect.getSelectedItem();
+                            dietaComidaDAO = new DietaComidaDAO();
+                            dietaComidas = dietaComidaDAO.buscarPorIdDieta(d.getIdDieta(), estado);
+                            lista = new ArrayList<>(dietaComidas);
+                            llenarTabla(lista, "DietaComida");
+                            break;
+                        case "Porcion":
+                            if (!jTextField1.getText().isEmpty()) {
+                                int tfp = Integer.parseInt(atributoTF);
+                                dietaComidaDAO = new DietaComidaDAO();
+                                estado = (jRadioButtonActivo.isSelected()) ? 1 : (jRadioButtonInactivo.isSelected()) ? 0 : (jRadioButtonAmbos.isSelected()) ? -1 : 0;
+                                dietaComidas = dietaComidaDAO.buscarPorPorcion(tfp, estado);
+                                lista = new ArrayList<>(dietaComidas);
+                                llenarTabla(lista, "DietaComida");
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Ingrese la porcion a buscar", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
+                            break;
+                        case "Horario":
+                            String h = jComboBoxAtribSelect.getSelectedItem().toString();
+                            dietaComidaDAO = new DietaComidaDAO();
+                            dietaComidas = dietaComidaDAO.buscarPorHorario(h, estado);
+                            lista = new ArrayList<>(dietaComidas);
+                            llenarTabla(lista, "DietaComida");
+                            break;
+                        case "Estado":
                             dietaComidaDAO = new DietaComidaDAO();
                             dietaComidas = dietaComidaDAO.buscar(estado);
                             lista = new ArrayList<>(dietaComidas);
                             llenarTabla(lista, "DietaComida");
-                        }
-                        break;
-                    case "Comida":
-                        Comida c = (Comida) jComboBoxAtribSelect.getSelectedItem();
-                        dietaComidaDAO = new DietaComidaDAO();
-                        dietaComidas = dietaComidaDAO.buscarPorIdComida(c.getIdComida(), estado);
-                        lista = new ArrayList<>(dietaComidas);
-                        llenarTabla(lista, "DietaComida");
-                        break;
-                    case "Tratamiento":
-                        Dieta d = (Dieta) jComboBoxAtribSelect.getSelectedItem();
-                        dietaComidaDAO = new DietaComidaDAO();
-                        dietaComidas = dietaComidaDAO.buscarPorIdDieta(d.getIdDieta(), estado);
-                        lista = new ArrayList<>(dietaComidas);
-                        llenarTabla(lista, "DietaComida");
-                        break;
-                    case "Porcion":
-                        if (!jTextField1.getText().isEmpty()) {
-                            int tfp = Integer.parseInt(atributoTF);
-                            dietaComidaDAO = new DietaComidaDAO();
-                            estado = (jRadioButtonActivo.isSelected()) ? 1 : (jRadioButtonInactivo.isSelected()) ? 0 : (jRadioButtonAmbos.isSelected()) ? -1 : 0;
-                            dietaComidas = dietaComidaDAO.buscarPorPorcion(tfp, estado);
-                            lista = new ArrayList<>(dietaComidas);
-                            llenarTabla(lista, "DietaComida");
-                        } else {
-                            JOptionPane.showMessageDialog(this, "Ingrese la porcion a buscar", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
-                        break;
-                    case "Horario":
-                        String h = jComboBoxAtribSelect.getSelectedItem().toString();
-                        dietaComidaDAO = new DietaComidaDAO();
-                        dietaComidas = dietaComidaDAO.buscarPorHorario(h, estado);
-                        lista = new ArrayList<>(dietaComidas);
-                        llenarTabla(lista, "DietaComida");
-                        break;
-                    case "Estado":
-                        dietaComidaDAO = new DietaComidaDAO();
-                        dietaComidas = dietaComidaDAO.buscar(estado);
-                        lista = new ArrayList<>(dietaComidas);
-                        llenarTabla(lista, "DietaComida");
-                        break;
+                            break;
+                    }
                 }
             }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Ingrese un valor numérico válido", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (NullPointerException ex) {
+            JOptionPane.showMessageDialog(this, "Ingrese un valor", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "ERROR", "Error", JOptionPane.ERROR_MESSAGE);
         }
         actualizarBotones();
     }//GEN-LAST:event_jButtonBuscarActionPerformed
@@ -1273,6 +1282,13 @@ public class ViewBuscar extends javax.swing.JPanel {
         if (c == '.' && jTextField1.getText().contains(".")) {//controla que solo se pueda ingresar un solo punto
             evt.consume();
         }
+        if (Character.isDigit(c)) {
+            String text = jTextField1.getText();
+            if (jTextField1.getText().length() >= 11) {
+                evt.consume();
+            }
+        }
+
     }//GEN-LAST:event_jTextField1KeyTyped
 
     private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed

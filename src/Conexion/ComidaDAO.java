@@ -143,8 +143,7 @@ public class ComidaDAO {
                 break;
         }
 
-        try (PreparedStatement ps = con.prepareStatement(SQL_SELECT);
-                ResultSet rs = ps.executeQuery()) {
+        try (PreparedStatement ps = con.prepareStatement(SQL_SELECT); ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 comida = new Comida();
@@ -160,7 +159,7 @@ public class ComidaDAO {
             ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(null, "Error al obtener comidas");
         }
-        return comidas; 
+        return comidas;
     }
 
     public ArrayList<Comida> buscarXCantCalorias(int cantCalorias, int condicion) {
@@ -225,6 +224,8 @@ public class ComidaDAO {
                     comida.setDetalle(rs.getString("detalle"));
                     comida.setCantCalorias(rs.getInt("cantcalorias"));
                     comida.setEstado(rs.getBoolean("estado"));
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se encontró ninguna comida con ese ID.", "Comida no encontrada", JOptionPane.WARNING_MESSAGE);
                 }
             }
         } catch (SQLException ex) {
@@ -259,6 +260,8 @@ public class ComidaDAO {
                     comida.setDetalle(rs.getString("detalle"));
                     comida.setCantCalorias(rs.getInt("cantcalorias"));
                     comida.setEstado(rs.getBoolean("estado"));
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se encontró ninguna comida con el nombre: " + nombre, "Comida no encontrada", JOptionPane.WARNING_MESSAGE);
                 }
             }
         } catch (SQLException ex) {
@@ -295,6 +298,9 @@ public class ComidaDAO {
                     comida.setCantCalorias(rs.getInt("cantcalorias"));
                     comida.setEstado(rs.getBoolean("estado"));
                     comidas.add(comida);
+                }
+                if (comidas.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "No se encontraron comidas con ese detalle.", "Resultado Vacío", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         } catch (SQLException ex) {
