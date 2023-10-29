@@ -32,10 +32,10 @@ public class DietaComidaDAO {
             ps.setString(4, "" + dietacomida.getHorario());
             ps.setBoolean(5, dietacomida.isEstado());
 
-            ps.executeUpdate(); 
-            try (ResultSet rs = ps.getGeneratedKeys()) { 
+            ps.executeUpdate();
+            try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
-                    dietacomida.setId(rs.getInt(1)); 
+                    dietacomida.setId(rs.getInt(1));
                     JOptionPane.showMessageDialog(null, "DietaComida inscripta");
                 } else {
                     JOptionPane.showMessageDialog(null, "Inscripcion fallida");
@@ -53,7 +53,7 @@ public class DietaComidaDAO {
         System.out.println("dietaComida = " + dietaComida);
         try (PreparedStatement ps = con.prepareStatement(SQL_UPDATE)) {
             ps.setInt(1, dietaComida.getPorcion());
-            ps.setString(2, dietaComida.getHorario()+"");
+            ps.setString(2, dietaComida.getHorario() + "");
             ps.setInt(3, dietaComida.getComida().getIdComida());
             ps.setInt(4, dietaComida.getDieta().getIdDieta());
 
@@ -77,7 +77,7 @@ public class DietaComidaDAO {
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idDietaComida);
 
-            int on = ps.executeUpdate(); 
+            int on = ps.executeUpdate();
             if (on > 0) {
                 JOptionPane.showMessageDialog(null, "DietaComida eliminada!!");
             } else {
@@ -107,21 +107,20 @@ public class DietaComidaDAO {
         DietaComida dietaComida = null;
         ArrayList<DietaComida> dietaComidas = new ArrayList<>();
 
-        try (PreparedStatement ps = con.prepareStatement(SQL_SELECT);
-                ResultSet rs = ps.executeQuery()) {
+        try (PreparedStatement ps = con.prepareStatement(SQL_SELECT); ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 dietaComida = new DietaComida();
                 dietaComida.setId(rs.getInt("iddietacomida"));
 
                 int idComida = rs.getInt("idComida");
-                ComidaDAO comidaDAO = new ComidaDAO(); 
-                Comida comida = comidaDAO.buscar(idComida, 3); 
+                ComidaDAO comidaDAO = new ComidaDAO();
+                Comida comida = comidaDAO.buscar(idComida, 3);
                 dietaComida.setComida(comida);
 
                 int idDieta = rs.getInt("idDieta");
                 DietaDAO dietaDAO = new DietaDAO();
-                Dieta dieta = dietaDAO.buscarPorId(idDieta, 1); 
+                Dieta dieta = dietaDAO.buscarPorId(idDieta, 1);
                 dietaComida.setDieta(dieta);
                 dietaComida.setEstado(rs.getBoolean("estado"));
                 dietaComida.setPorcion(rs.getInt("porcion"));
@@ -132,6 +131,9 @@ public class DietaComidaDAO {
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(null, "Error al obtener DietasComidas");
+        }
+        if (dietaComidas.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se encontraron DietasComidas.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
         }
         return dietaComidas;
     }
@@ -171,6 +173,8 @@ public class DietaComidaDAO {
                     dietaComida.setEstado(rs.getBoolean("estado"));
                     dietaComida.setPorcion(rs.getInt("porcion"));
                     dietaComida.setHorario(Horario.valueOf(rs.getString("horario")));
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se encontró ninguna DietaComida con ese ID.", "DietaComida no encontrada", JOptionPane.WARNING_MESSAGE);
                 }
             }
         } catch (SQLException ex) {
@@ -225,6 +229,9 @@ public class DietaComidaDAO {
             ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(null, "Error al obtener DietasComidas por ID de Dieta");
         }
+        if (dietaComidas.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se encontraron DietasComidas.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
+        }
         return dietaComidas;
     }
 
@@ -276,6 +283,9 @@ public class DietaComidaDAO {
             ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(null, "Error al buscar DietasComidas por porción");
         }
+        if (dietaComidas.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se encontraron DietasComidas.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
+        }
         return dietaComidas;
     }
 
@@ -305,12 +315,12 @@ public class DietaComidaDAO {
                     dietaComida.setId(rs.getInt("iddietacomida"));
 
                     int idDieta = rs.getInt("idDieta");
-                    ComidaDAO comidaDAO = new ComidaDAO(); 
-                    Comida comida = comidaDAO.buscar(idComida, 1); 
+                    ComidaDAO comidaDAO = new ComidaDAO();
+                    Comida comida = comidaDAO.buscar(idComida, 1);
                     dietaComida.setComida(comida);
 
-                    DietaDAO dietaDAO = new DietaDAO(); 
-                    Dieta dieta = dietaDAO.buscarPorId(idDieta, 1); 
+                    DietaDAO dietaDAO = new DietaDAO();
+                    Dieta dieta = dietaDAO.buscarPorId(idDieta, 1);
                     dietaComida.setDieta(dieta);
 
                     dietaComida.setPorcion(rs.getInt("porcion"));
@@ -324,13 +334,16 @@ public class DietaComidaDAO {
             ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(null, "Error al buscar DietasComidas por idComida");
         }
+        if (dietaComidas.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se encontraron DietasComidas.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
+        }
         return dietaComidas;
     }
 
     public ArrayList<DietaComida> buscarPorHorario(String horario, int estado) {
         String SQL_SELECT = null;
         DietaComida dietaComida = null;
-        ArrayList<DietaComida> dietaComidas= new ArrayList<>();
+        ArrayList<DietaComida> dietaComidas = new ArrayList<>();
 
         switch (estado) {
             case 1:
@@ -353,11 +366,11 @@ public class DietaComidaDAO {
                     dietaComida.setId(rs.getInt("iddietacomida"));
 
                     int idDieta = rs.getInt("idDieta");
-                    ComidaDAO comidaDAO = new ComidaDAO(); 
-                    Comida comida = comidaDAO.buscar(idDieta, 1); 
+                    ComidaDAO comidaDAO = new ComidaDAO();
+                    Comida comida = comidaDAO.buscar(idDieta, 1);
                     dietaComida.setComida(comida);
 
-                    DietaDAO dietaDAO = new DietaDAO(); 
+                    DietaDAO dietaDAO = new DietaDAO();
                     Dieta dieta = dietaDAO.buscarPorId(idDieta, 1); // 1 significa que está activo
                     dietaComida.setDieta(dieta);
 
@@ -371,6 +384,9 @@ public class DietaComidaDAO {
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(null, "Error al buscar DietasComidas por horario");
+        }
+        if (dietaComidas.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se encontraron DietasComidas.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
         }
         return dietaComidas;
     }

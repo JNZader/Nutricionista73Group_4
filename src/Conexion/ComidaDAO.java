@@ -155,6 +155,9 @@ public class ComidaDAO {
 
                 comidas.add(comida);
             }
+            if (comidas.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "No se encontraron comidas.");
+            }
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(null, "Error al obtener comidas");
@@ -190,6 +193,9 @@ public class ComidaDAO {
                     calorias.setCantCalorias(rs.getInt("cantcalorias"));
                     calorias.setEstado(true);
                     comidas.add(calorias);
+                }
+                if (comidas.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "No se encontraron comidas con las calorias especificadas.");
                 }
             }
         } catch (SQLException ex) {
