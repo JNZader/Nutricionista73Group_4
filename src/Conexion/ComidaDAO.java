@@ -71,13 +71,14 @@ public class ComidaDAO {
         }
 
         // Si  no existe actualiza
-        String SQL_UPDATE = "UPDATE comida SET nombre=?, detalle=?, cantCalorias=? WHERE idComida=?";
+        String SQL_UPDATE = "UPDATE comida SET nombre=?, detalle=?, cantCalorias=?, estado=? WHERE idComida=?";
 
         try (PreparedStatement ps = con.prepareStatement(SQL_UPDATE)) {
             ps.setString(1, comida.getNombre());
             ps.setString(2, comida.getDetalle());
             ps.setInt(3, comida.getCantCalorias());
-            ps.setInt(4, comida.getIdComida());
+            ps.setBoolean(4, comida.isEstado());
+            ps.setInt(5, comida.getIdComida());
 
             int mod = ps.executeUpdate();
             if (mod > 0) {
@@ -92,7 +93,7 @@ public class ComidaDAO {
     }
 
     public void borrarTotal(Comida comida) {
-        String SQL_DELETE = "DELETE FROM comida WHERE idComida = ? AND idComida NOT IN (SELECT idComida FROM dieta UNION SELECT idComida FROM dietacomida)";
+        String SQL_DELETE = "DELETE FROM comida WHERE idComida = ? AND idComida NOT IN (SELECT idComida  FROM dietacomida)";
 
         try (PreparedStatement ps = con.prepareStatement(SQL_DELETE)) {
             ps.setInt(1, comida.getIdComida());
