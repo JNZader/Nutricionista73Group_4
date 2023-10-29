@@ -1,4 +1,0 @@
-Vistas.NumericRangeFilter
-Vistas.NumericRangeFilter3
-Vistas.NumericRangeFilter2
-Vistas.ViewBuscar
