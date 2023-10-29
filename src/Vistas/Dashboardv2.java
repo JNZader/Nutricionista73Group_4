@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Vistas;
 
 import java.awt.BorderLayout;
@@ -12,6 +7,8 @@ import javax.swing.JPanel;
 
 public class Dashboardv2 extends javax.swing.JFrame {
 
+    int LayoutX;
+    int LayoutY;
     Color defaultColor;
     Color clickedColor;
 
@@ -37,7 +34,8 @@ public class Dashboardv2 extends javax.swing.JFrame {
         jPContenedor.revalidate();
         jPContenedor.repaint();
     }
-        private void setDefaultButtonColors() {
+
+    private void setDefaultButtonColors() {
         jButton1.setBackground(defaultColor);
         jButton2.setBackground(defaultColor);
         jButton3.setBackground(defaultColor);
@@ -80,6 +78,16 @@ public class Dashboardv2 extends javax.swing.JFrame {
         jPanel1.setMinimumSize(new java.awt.Dimension(960, 720));
 
         jPanel2.setBackground(new java.awt.Color(150, 200, 130));
+        jPanel2.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jPanel2MouseDragged(evt);
+            }
+        });
+        jPanel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jPanel2MousePressed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -292,9 +300,18 @@ public class Dashboardv2 extends javax.swing.JFrame {
         updateButtonColors(jButton7);
     }//GEN-LAST:event_jButton7ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void jPanel2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MousePressed
+        if (evt.getButton() == java.awt.event.MouseEvent.BUTTON1) {
+            LayoutX = evt.getX();
+            LayoutY = evt.getY();
+        }
+    }//GEN-LAST:event_jPanel2MousePressed
+
+    private void jPanel2MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MouseDragged
+        this.setLocation(evt.getXOnScreen() - LayoutX, evt.getYOnScreen() - LayoutY);
+    }//GEN-LAST:event_jPanel2MouseDragged
+
+ 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

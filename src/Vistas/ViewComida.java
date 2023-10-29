@@ -7,8 +7,6 @@ package Vistas;
 
 import Conexion.ComidaDAO;
 import Entidades.Comida;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -25,6 +23,8 @@ public class ViewComida extends javax.swing.JPanel {
         llenarTabla();
         jBmodifComida.setEnabled(false);
         checkActivos.setSelected(true);
+        ListSelectionModel selectionModel = tablaComida.getSelectionModel();
+        selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     public ViewComida(Comida comida) {
@@ -107,6 +107,7 @@ public class ViewComida extends javax.swing.JPanel {
         });
 
         jLabel5.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("LISTA DE COMIDAS");
 
         jBagregarComida.setBackground(new java.awt.Color(150, 200, 130));
@@ -143,7 +144,7 @@ public class ViewComida extends javax.swing.JPanel {
                 {null, null, null, null, null}
             },
             new String [] {
-                "ID COMIDA", "NOMBRE COMIDA", "DETALLE COMIDA", "CANT.CALORIAS", "ESTADO"
+                "ID", "NOMBRE COMIDA", "DETALLE COMIDA", "CANT.CALORIAS", "ESTADO"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -154,13 +155,20 @@ public class ViewComida extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        tablaComida.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tablaComida);
         if (tablaComida.getColumnModel().getColumnCount() > 0) {
-            tablaComida.getColumnModel().getColumn(0).setResizable(false);
+            tablaComida.getColumnModel().getColumn(0).setMinWidth(70);
+            tablaComida.getColumnModel().getColumn(0).setPreferredWidth(70);
+            tablaComida.getColumnModel().getColumn(0).setMaxWidth(70);
             tablaComida.getColumnModel().getColumn(1).setResizable(false);
             tablaComida.getColumnModel().getColumn(2).setResizable(false);
-            tablaComida.getColumnModel().getColumn(3).setResizable(false);
-            tablaComida.getColumnModel().getColumn(4).setResizable(false);
+            tablaComida.getColumnModel().getColumn(3).setMinWidth(120);
+            tablaComida.getColumnModel().getColumn(3).setPreferredWidth(120);
+            tablaComida.getColumnModel().getColumn(3).setMaxWidth(120);
+            tablaComida.getColumnModel().getColumn(4).setMinWidth(80);
+            tablaComida.getColumnModel().getColumn(4).setPreferredWidth(80);
+            tablaComida.getColumnModel().getColumn(4).setMaxWidth(80);
         }
 
         botonEliminar.setBackground(new java.awt.Color(150, 200, 130));
@@ -207,98 +215,98 @@ public class ViewComida extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(92, 92, 92)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(64, 64, 64)
+                        .addComponent(jCestadoComida, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(79, 79, 79)
+                        .addComponent(jBmodifComida, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jBagregarComida, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTdetalleComida))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTnombreComida, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTcantCalorias, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(94, 94, 94))
+            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(botonEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(59, 59, 59)
+                .addComponent(checkInactivos, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(101, 101, 101)
+                .addComponent(checkActivos, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(checkTodos, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42)
+                .addComponent(botonSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSeparator1)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel7))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jTnombreComida, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jCestadoComida, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTcantCalorias, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jTdetalleComida, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jBmodifComida)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jBagregarComida)))
-                                .addGap(70, 70, 70))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(208, 208, 208)
-                        .addComponent(jLabel5)
-                        .addGap(0, 396, Short.MAX_VALUE))
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 828, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(15, 15, 15)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(botonEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(114, 114, 114)
-                                .addComponent(checkInactivos)
-                                .addGap(100, 100, 100)
-                                .addComponent(checkActivos)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(checkTodos)
-                                .addGap(18, 18, 18)
-                                .addComponent(botonSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane2))))
-                .addContainerGap())
-            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addGap(44, 44, 44)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTnombreComida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTdetalleComida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTcantCalorias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jCestadoComida, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addGap(35, 35, 35)
-                            .addComponent(jLabel7)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jBagregarComida)
-                            .addComponent(jBmodifComida))))
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel1))
+                    .addComponent(jLabel3)
+                    .addComponent(jTcantCalorias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jTdetalleComida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jBagregarComida)
+                        .addComponent(jBmodifComida))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jCestadoComida, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)))
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(checkActivos)
-                        .addComponent(checkTodos)
-                        .addComponent(checkInactivos)
-                        .addComponent(botonEliminar))
-                    .addComponent(botonSalir))
-                .addContainerGap())
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(checkTodos)
+                            .addComponent(botonSalir)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addComponent(checkActivos))
+                    .addComponent(botonEliminar)
+                    .addComponent(checkInactivos))
+                .addGap(85, 85, 85))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -356,50 +364,6 @@ public class ViewComida extends javax.swing.JPanel {
         }
     }
 
-//    public void llenarTablaActivos() {
-//
-//        ComidaDAO codao = new ComidaDAO();
-//        ArrayList<Comida> comidas = codao.listarComidas(1);
-//        limpiarTabla();
-//        if (comidas != null) {
-//            for (Comida aux : comidas) {
-//                Object[] filas = new Object[5];
-//                filas[0] = aux.getIdComida();
-//                filas[1] = aux.getNombre();
-//                filas[2] = aux.getDetalle();
-//                filas[3] = aux.getCantCalorias();
-//                if (aux.isEstado()) {
-//                    filas[4] = "Activo";
-//                } else {
-//                    filas[4] = "Inactivo";
-//                }
-//                mod.addRow(filas);
-//            }
-//        }
-//    }
-//
-//    public void llenarTablaInactivos() {
-//
-//        ComidaDAO codao = new ComidaDAO();
-//        ArrayList<Comida> comidas = codao.listarComidas(0);
-//        limpiarTabla();
-//        if (comidas != null) {
-//            for (Comida aux : comidas) {
-//                Object[] filas = new Object[5];
-//                filas[0] = aux.getIdComida();
-//                filas[1] = aux.getNombre();
-//                filas[2] = aux.getDetalle();
-//                filas[3] = aux.getCantCalorias();
-//                if (aux.isEstado()) {
-//                    filas[4] = "Activo";
-//                } else {
-//                    filas[4] = "Inactivo";
-//                }
-//                mod.addRow(filas);
-//            }
-//        }
-//    }
-
     private void botonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSalirActionPerformed
         Dashboardv2 db = new Dashboardv2();
         this.setVisible(false);
@@ -411,11 +375,40 @@ public class ViewComida extends javax.swing.JPanel {
         if ((c < 'a' || c > 'z') && (c < 'A' || c > 'Z') && (c < ' ' || c > ' ')) {
             evt.consume();
         }
+ 
+        if (Character.isLetter(c)) {
+            if (jTnombreComida.getText().length() >= 100) {
+                evt.consume();
+            }
+        }
+        if (Character.isWhitespace(c)) {
+            int length = jTnombreComida.getText().length();
+            if (length > 0 && jTnombreComida.getText().charAt(length - 1) == ' ') {
+                evt.consume();
+            }
+        }
+        if (c == '.' && jTnombreComida.getText().contains(".")) {//controla que solo se pueda ingresar un solo punto
+            evt.consume();
+        }
     }//GEN-LAST:event_jTnombreComidaKeyTyped
 
     private void jTdetalleComidaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTdetalleComidaKeyTyped
         char c = evt.getKeyChar();
         if ((c < 'a' || c > 'z') && (c < 'A' || c > 'Z') && (c < ' ' || c > ' ')) {
+            evt.consume();
+        }
+                if (Character.isLetter(c)) {
+            if (jTdetalleComida.getText().length() >= 100) {
+                evt.consume();
+            }
+        }
+        if (Character.isWhitespace(c)) {
+            int length = jTdetalleComida.getText().length();
+            if (length > 0 && jTdetalleComida.getText().charAt(length - 1) == ' ') {
+                evt.consume();
+            }
+        }
+        if (c == '.' && jTdetalleComida.getText().contains(".")) {//controla que solo se pueda ingresar un solo punto
             evt.consume();
         }
     }//GEN-LAST:event_jTdetalleComidaKeyTyped
@@ -435,6 +428,7 @@ public class ViewComida extends javax.swing.JPanel {
         ComidaDAO comidaDAO = new ComidaDAO();
         if (selectedRow != -1) {
             int idcomida = (int) tablaComida.getValueAt(selectedRow, 0);
+            System.out.println("idcomida = " + idcomida);
             int estado = "Activo".equals((String) tablaComida.getValueAt(selectedRow, 4)) ? 1 : 0;
             Comida comida = comidaDAO.buscar(idcomida, estado);
             if (comida != null) {

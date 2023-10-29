@@ -603,6 +603,15 @@ public class ViewBuscar extends javax.swing.JPanel {
             jButtonEliminar.setEnabled(false);
             jButtonAnular.setEnabled(false);
         }
+        if(jComboBoxEntidades.getSelectedIndex()==2&&jComboBoxAtributos.getSelectedIndex()==1) {
+            jRadioButtonActivo.setEnabled(false);
+            jRadioButtonAmbos.setEnabled(false);
+            jRadioButtonInactivo.setEnabled(false);
+        }else{
+            jRadioButtonActivo.setEnabled(true);
+            jRadioButtonAmbos.setEnabled(true);
+            jRadioButtonInactivo.setEnabled(true);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -1228,6 +1237,7 @@ public class ViewBuscar extends javax.swing.JPanel {
                 ((AbstractDocument) jTextField1.getDocument()).setDocumentFilter(null);
                 break;
         }
+        actualizarBotones();
     }//GEN-LAST:event_jComboBoxAtributosItemStateChanged
 
     private void jComboBoxAtribSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxAtribSelectActionPerformed
