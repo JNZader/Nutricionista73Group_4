@@ -102,7 +102,7 @@ public void llenarTabla() {
         buttonGroup1.add(botonDietasFinalizadas);
         botonDietasFinalizadas.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         botonDietasFinalizadas.setSelected(true);
-        botonDietasFinalizadas.setText("Dietas Finalizadas");
+        botonDietasFinalizadas.setText("Lista de Dietas");
         botonDietasFinalizadas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonDietasFinalizadasActionPerformed(evt);
@@ -111,7 +111,7 @@ public void llenarTabla() {
 
         buttonGroup1.add(botonDietasNoFinalizadas);
         botonDietasNoFinalizadas.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        botonDietasNoFinalizadas.setText("Dietas no Finalizadas");
+        botonDietasNoFinalizadas.setText("Dietas con objetivos no cumplidos a la fecha");
         botonDietasNoFinalizadas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonDietasNoFinalizadasActionPerformed(evt);
@@ -146,14 +146,14 @@ public void llenarTabla() {
             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 840, Short.MAX_VALUE)
             .addComponent(jSeparator1)
             .addGroup(layout.createSequentialGroup()
-                .addGap(81, 81, 81)
+                .addGap(93, 93, 93)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(salirControlTratamiento)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(layout.createSequentialGroup()
                             .addGap(18, 18, 18)
                             .addComponent(botonDietasFinalizadas)
-                            .addGap(267, 267, 267)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(botonDietasNoFinalizadas))
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 653, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -165,15 +165,15 @@ public void llenarTabla() {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonDietasFinalizadas)
                     .addComponent(botonDietasNoFinalizadas))
                 .addGap(41, 41, 41)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addComponent(salirControlTratamiento)
-                .addGap(45, 45, 45))
+                .addGap(48, 48, 48))
         );
     }// </editor-fold>//GEN-END:initComponents
 
