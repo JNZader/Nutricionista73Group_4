@@ -2,10 +2,18 @@ package Vistas;
 
 import Conexion.PacienteDAO;
 import Entidades.*;
+import java.awt.Toolkit;
 import javax.swing.JOptionPane;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.DocumentFilter;
 
 public class ViewPaciente extends javax.swing.JPanel {
 
+    private DocumentFilter filtroMix, filtroLetras;
+    private NumericRangeFilter6 fp;
     PacienteDAO pd = new PacienteDAO();
 //    private ImageIcon imagen;
 //    private Icon icono;
@@ -15,8 +23,13 @@ public class ViewPaciente extends javax.swing.JPanel {
         jBModificar.setEnabled(false);
         jBEliminar.setEnabled(false);
         ViewBuscar VB = new ViewBuscar();
-
-//        this.pintarImagen(this.iconoPaciente, "src/Vistas/imagenPaciente.png");
+        filtroMix = new FiltraEntrada6(FiltraEntrada6.NUM_LETRAS);
+        filtroLetras = new FiltraEntrada6(FiltraEntrada6.SOLO_LETRAS);
+        ((AbstractDocument) jTDomicilio.getDocument()).setDocumentFilter(filtroMix);
+        ((AbstractDocument) jTNombre.getDocument()).setDocumentFilter(filtroLetras);
+        fp = new NumericRangeFilter6();
+        ((AbstractDocument) jTPesoActual.getDocument()).setDocumentFilter(fp);
+        jTID.setEditable(false);
     }
 
     public ViewPaciente(Paciente paciente) {
@@ -123,6 +136,12 @@ public class ViewPaciente extends javax.swing.JPanel {
             }
         });
 
+        jTPesoActual.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTPesoActualKeyTyped(evt);
+            }
+        });
+
         jLabel9.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel9.setText("ID");
 
@@ -155,24 +174,25 @@ public class ViewPaciente extends javax.swing.JPanel {
                     .addComponent(jLabel9))
                 .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(226, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jTID, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTPesoActual, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-                            .addComponent(jTTelefono, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTDomicilio, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTDni, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jTPesoActual, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 170, Short.MAX_VALUE)
                         .addComponent(jBBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(30, 30, 30))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jChEstado)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel10)
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jTDni, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                            .addComponent(jTDomicilio, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTNombre, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTTelefono, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -428,6 +448,21 @@ public class ViewPaciente extends javax.swing.JPanel {
         if (Character.isDigit(c)) {
             evt.consume();
         }
+
+        if (Character.isLetter(c)) {
+            if (jTNombre.getText().length() >= 100) {
+                evt.consume();
+            }
+        }
+        if (Character.isWhitespace(c)) {
+            int length = jTNombre.getText().length();
+            if (length > 0 && jTNombre.getText().charAt(length - 1) == ' ') {
+                evt.consume();
+            }
+        }
+        if (c == '.' && jTNombre.getText().contains(".")) {//controla que solo se pueda ingresar un solo punto
+            evt.consume();
+        }
     }//GEN-LAST:event_jTNombreKeyTyped
 
     private void jTDniKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTDniKeyTyped
@@ -444,7 +479,18 @@ public class ViewPaciente extends javax.swing.JPanel {
     }//GEN-LAST:event_jTDniKeyTyped
 
     private void jTDomicilioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTDomicilioKeyTyped
-        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if (Character.isLetter(c)) {
+            if (jTDomicilio.getText().length() >= 100) {
+                evt.consume();
+            }
+        }
+        if (Character.isWhitespace(c)) {
+            int length = jTDomicilio.getText().length();
+            if (length > 0 && jTDomicilio.getText().charAt(length - 1) == ' ') {
+                evt.consume();
+            }
+        }
     }//GEN-LAST:event_jTDomicilioKeyTyped
 
     private void jTTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTTelefonoKeyTyped
@@ -458,6 +504,12 @@ public class ViewPaciente extends javax.swing.JPanel {
             evt.consume();
         }
     }//GEN-LAST:event_jTTelefonoKeyTyped
+
+    private void jTPesoActualKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTPesoActualKeyTyped
+        if (jTPesoActual.getText().length() >= 6) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTPesoActualKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBBuscar;
@@ -495,6 +547,121 @@ public class ViewPaciente extends javax.swing.JPanel {
         jTPesoActual.setText("");
         jChEstado.setSelected(false);
         jTID.setText("");
+    }
+
+    class FiltraEntrada6 extends DocumentFilter {
+
+        public static final char SOLO_NUMEROS = 'N';
+        public static final char SOLO_LETRAS = 'L';
+        public static final char NUM_LETRAS = 'M';
+        public static final char DEFAULT = '*';
+
+        private char tipoEntrada;
+        private int longitudCadena = 0;
+        private int longitudActual = 0;
+
+        public FiltraEntrada6() {
+            tipoEntrada = DEFAULT;
+        }
+
+        public FiltraEntrada6(char tipoEntrada) {
+            this.tipoEntrada = tipoEntrada;
+        }
+
+        public FiltraEntrada6(char tipoEntrada, int longitudCadena) {
+            this.tipoEntrada = tipoEntrada;
+            this.longitudCadena = longitudCadena;
+        }
+
+        @Override
+        public void insertString(DocumentFilter.FilterBypass fb, int i, String string, javax.swing.text.AttributeSet as) throws BadLocationException {
+            if (string != null && !string.isEmpty()) { // verifica que el texto no sea nulo ni este vacio
+                Document dc = fb.getDocument();
+                longitudActual = dc.getLength();
+                if (longitudCadena == 0 || longitudActual < longitudCadena) {
+                    fb.insertString(i, string, as); // Inserta el texto si no se supera la longitud máxima
+                }
+            }
+        }
+
+        @Override
+        public void remove(DocumentFilter.FilterBypass fb, int offset, int length) throws BadLocationException {
+            super.remove(fb, offset, length);
+        }
+
+        /*
+        En este método:
+        /// @Override: Indica que estás anulando el método remove de la superclase DocumentFilter.
+
+        /// public void remove(DocumentFilter.FilterBypass fb, int offset, int length) throws BadLocationException:
+        Esto es la declaración del método, que acepta tres parámetros: fb (un objeto FilterBypass que permite realizar la eliminación),
+        offset (la posición desde la cual se eliminará el texto) y length (la cantidad de caracteres a eliminar).  
+        
+        ///super.remove(fb, offset, length);: Este es el llamado al método remove de la superclase DocumentFilter, 
+        que se encarga de realizar la eliminación del texto en el documento. 
+        No se requiere ninguna lógica adicional en este método, ya que simplemente delega la operación de eliminación a la implementación predeterminada de la superclase.
+         */
+        @Override
+        public void replace(DocumentFilter.FilterBypass fb, int i, int i1, String string, javax.swing.text.AttributeSet as) throws BadLocationException {
+            Document dc = fb.getDocument();
+            if (string == null) {
+                fb.replace(0, i1, "", as);
+                return;
+            }
+            if (string.isEmpty()) {
+                fb.replace(0, i1, "", as);
+                return;
+            }
+            longitudActual = dc.getLength();
+            if (esValido(string)) {
+                if (this.longitudCadena == 0 || longitudActual < longitudCadena) {
+                    fb.replace(i, i1, string, as);
+                }
+            }
+        }
+
+        private boolean esValido(String valor) {
+            char[] letras = valor.toCharArray();
+            boolean valido = false;
+            for (int i = 0; i < letras.length; i++) {
+
+                switch (tipoEntrada) {
+                    case SOLO_NUMEROS:
+                        return valor.matches("[0-9]+");// verifica si solo contiene numeros
+                    case SOLO_LETRAS:
+                        return valor.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]+");// verifica si solo contiene letras y espacios
+                    case NUM_LETRAS:
+                        return valor.matches("[0-9a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]+");// verifica si contiene números, letras y espacios
+                    default:
+                        valido = true;
+                        return valido;
+                }
+            }
+            return valido;
+        }
+    }
+
+    class NumericRangeFilter6 extends DocumentFilter {
+
+        @Override
+        public void replace(DocumentFilter.FilterBypass fb, int i, int i1, String string, AttributeSet as) throws BadLocationException {
+            String currentText = fb.getDocument().getText(0, fb.getDocument().getLength());//obtiene el texto actual del jtf
+
+            String nextText = currentText.substring(0, i) + string + currentText.substring(i + i1);//concatena el texto a insertar con el texto acutal
+
+            try {
+                double num = Double.parseDouble(nextText);//intenta convertir el texto en numero
+
+                if (num >= 0.0 && num <= 500.0) {//verifica si el numero esta en el rango de 0.0 a 10.0
+                    super.replace(fb, i, i1, string, as);
+                } else {
+                    //fuera de rango
+                    Toolkit.getDefaultToolkit().beep();//sonido de error
+                }
+            } catch (NumberFormatException e) {
+                Toolkit.getDefaultToolkit().beep(); //El texto no es un número válido...Emite un sonido de error.
+            }
+        }
     }
 
 }
