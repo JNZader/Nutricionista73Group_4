@@ -256,6 +256,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jtnombre">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jtnombreKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jBGuardar">
       <Properties>
@@ -337,6 +340,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="jtpesofinal">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jtpesofinalKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JCheckBox" name="jCbEstado">
     </Component>
@@ -502,6 +508,9 @@
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="jtfPorcion">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jtfPorcionKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jbModificar">
       <Properties>
