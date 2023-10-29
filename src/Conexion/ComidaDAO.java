@@ -97,7 +97,7 @@ public class ComidaDAO {
         try (PreparedStatement ps = con.prepareStatement(SQL_DELETE)) {
             ps.setInt(1, comida.getIdComida());
             int del = ps.executeUpdate();
-            if (del == 1) {
+            if (del > 0) {
                 JOptionPane.showMessageDialog(null, "Comida eliminada con éxito");
             } else {
                 JOptionPane.showMessageDialog(null, "No se puede eliminar la comida debido a relaciones con otras tablas.");
