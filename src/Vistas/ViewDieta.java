@@ -11,6 +11,8 @@ import Entidades.Horario;
 import Entidades.Paciente;
 import com.toedter.calendar.JTextFieldDateEditor;
 import java.awt.Toolkit;
+import static java.awt.image.ImageObserver.ERROR;
+import static java.awt.image.ImageObserver.WIDTH;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.Date;
@@ -20,6 +22,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.text.AbstractDocument;
@@ -36,6 +40,7 @@ public class ViewDieta extends javax.swing.JPanel {
 
     private Dieta die;
     private DietaComida dietCom;
+    private DietaComidaDAO dieDAO = new DietaComidaDAO();
 
     DefaultTableModel modelo = new DefaultTableModel();
     DefaultTableModel mode = new DefaultTableModel();
@@ -94,6 +99,8 @@ public class ViewDieta extends javax.swing.JPanel {
         ((AbstractDocument) jtnombre.getDocument()).setDocumentFilter(filtroLetras);
         ((AbstractDocument) jtfPorcion.getDocument()).setDocumentFilter(filtroNumeros);
         ((AbstractDocument) jtpesofinal.getDocument()).setDocumentFilter(fpf);
+
+        listSelection();
     }
 
     public ViewDieta(Dieta dieta) {
@@ -203,11 +210,21 @@ public class ViewDieta extends javax.swing.JPanel {
         modelo.addColumn("Estado");
         modelo.addColumn("Peso final");
         modelo.addColumn("Dieta");
-
         jTablaDietaDispo.setModel(modelo);
+        for (int i = 0; i < jTablaDietaDispo.getColumnCount(); i++) {
+            jTablaDietaDispo.getTableHeader().getColumnModel().getColumn(i).setResizable(false);
+        }
+
+        
         jTablaDietaDispo.getColumnModel().getColumn(7).setMinWidth(0);
         jTablaDietaDispo.getColumnModel().getColumn(7).setMaxWidth(0);
         jTablaDietaDispo.getColumnModel().getColumn(7).setWidth(0);
+        jTablaDietaDispo.getColumnModel().getColumn(5).setMinWidth(0);
+        jTablaDietaDispo.getColumnModel().getColumn(5).setMaxWidth(0);
+        jTablaDietaDispo.getColumnModel().getColumn(5).setWidth(0);
+        jTablaDietaDispo.getColumnModel().getColumn(0).setMinWidth(30);
+        jTablaDietaDispo.getColumnModel().getColumn(0).setMaxWidth(30);
+        jTablaDietaDispo.getColumnModel().getColumn(0).setWidth(30);
     }
 
     public void llenarCabeceraDetalle() {
@@ -218,10 +235,16 @@ public class ViewDieta extends javax.swing.JPanel {
         mode.addColumn("obj");
 
         jTablaDetalleDieta.setModel(mode);
-
+        for (int i = 0; i < jTablaDetalleDieta.getColumnCount(); i++) {
+            jTablaDetalleDieta.getTableHeader().getColumnModel().getColumn(i).setResizable(false);
+        }
         jTablaDetalleDieta.getColumnModel().getColumn(4).setMinWidth(0);
         jTablaDetalleDieta.getColumnModel().getColumn(4).setMaxWidth(0);
         jTablaDetalleDieta.getColumnModel().getColumn(4).setWidth(0);
+
+        jTablaDetalleDieta.getColumnModel().getColumn(0).setMinWidth(30);
+        jTablaDetalleDieta.getColumnModel().getColumn(0).setMaxWidth(30);
+        jTablaDetalleDieta.getColumnModel().getColumn(0).setWidth(30);
 
     }
 
@@ -257,17 +280,32 @@ public class ViewDieta extends javax.swing.JPanel {
 
             modelo.addRow(fila);
         }
+        jTablaDietaDispo.setModel(modelo);
+        for (int i = 0; i < jTablaDietaDispo.getColumnCount(); i++) {
+            jTablaDietaDispo.getTableHeader().getColumnModel().getColumn(i).setResizable(false);
+        }
         jTablaDietaDispo.setModel(modelo);// es
         jTablaDietaDispo.getColumnModel().getColumn(7).setMinWidth(0);
         jTablaDietaDispo.getColumnModel().getColumn(7).setMaxWidth(0);
         jTablaDietaDispo.getColumnModel().getColumn(7).setWidth(0);
+
+        jTablaDietaDispo.getColumnModel().getColumn(0).setMinWidth(30);
+        jTablaDietaDispo.getColumnModel().getColumn(0).setMaxWidth(30);
+        jTablaDietaDispo.getColumnModel().getColumn(0).setWidth(30);
+
+        jTablaDietaDispo.getColumnModel().getColumn(5).setMinWidth(0);
+        jTablaDietaDispo.getColumnModel().getColumn(5).setMaxWidth(0);
+        jTablaDietaDispo.getColumnModel().getColumn(5).setWidth(0);
     }
 
-    public void llenarTablaDetalleDieta(DietaComida i) {
-
-        actualizarTablaDos();
-
-        mode.addRow(new Object[]{i.getId(), i.getComida(), i.getPorcion(), i.getHorario(), i});
+    public void llenarTablaDetalleDieta(Dieta i) {
+        int id = i.getIdDieta();
+        
+        ArrayList<DietaComida> buscarPorIdDieta = dieDAO.buscarPorIdDieta(id, 1);
+        for (DietaComida d : buscarPorIdDieta) {
+            mode.addRow(new Object[]{d.getDieta().getIdDieta(), d.getComida(), d.getPorcion(), d.getHorario(), i});
+        }
+        
 
         jTablaDetalleDieta.setModel(mode);// es
 
@@ -707,7 +745,7 @@ public class ViewDieta extends javax.swing.JPanel {
     }//GEN-LAST:event_jBGuardarActionPerformed
 
     private void jbAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAgregarActionPerformed
-
+        actualizarTablaDos();
         try {//recopila los datos de los textfield, radio button y jdatechosser y los guarda en diferentes variables
             if (jComboBoxComidas.getSelectedItem() == null || jComboBoxHorario.getSelectedItem() == null
                     || jtfPorcion.getText().isEmpty() || jTablaDietaDispo.getSelectedRow() == -1) {
@@ -729,7 +767,8 @@ public class ViewDieta extends javax.swing.JPanel {
                 Horario horarios = (Horario) jComboBoxHorario.getSelectedItem();
                 DietaComida dietaComida = comidaDie.insertar(new DietaComida(comidas, diet, porcion, horarios, true));
 
-                llenarTablaDetalleDieta(dietaComida);
+                llenarTablaDetalleDieta(diet);
+                
                 limpiarTodo();
             }
         } catch (NumberFormatException e) {
@@ -850,7 +889,7 @@ public class ViewDieta extends javax.swing.JPanel {
 
                 comidaDie.actualizar(dietaComida);
 
-                llenarTablaDetalleDieta(dietaComida);
+                llenarTablaDetalleDieta(die);
             }
         } catch (NumberFormatException e) {
             e.printStackTrace(System.out);
@@ -940,6 +979,45 @@ public class ViewDieta extends javax.swing.JPanel {
     private javax.swing.JTextField jtpesofinal;
     // End of variables declaration//GEN-END:variables
 
+    // Supongamos que tu JTable se llama jTable1
+    public void listSelection() {
+
+        jTablaDietaDispo.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                actualizarTablaDos();
+                // Asegúrate de que no se esté ajustando la selección
+                if (!e.getValueIsAdjusting()) {
+                    // Obtiene el modelo de la tabla
+                    javax.swing.table.TableModel model = jTablaDietaDispo.getModel();
+
+                    // Obtiene el índice de la fila seleccionada
+                    int selectedRow = jTablaDietaDispo.getSelectedRow();
+
+                    // Obtiene el valor de la primera columna (columna 0) en la fila seleccionada
+                    Object idValue = model.getValueAt(selectedRow, 0);
+
+                    // Convierte el valor a String o al tipo de datos que estés usando para el ID
+                    String idString = String.valueOf(idValue);
+
+                    // Haz lo que necesites hacer con el ID
+                    System.out.println("ID seleccionado: " + idString);
+
+                    ArrayList<DietaComida> buscarPorIdDieta = dieDAO.buscarPorIdDieta((int) idValue, 1);
+
+                    for (DietaComida i : buscarPorIdDieta) {
+                        mode.addRow(new Object[]{i.getDieta().getIdDieta(), i.getComida().getNombre(), i.getPorcion(), i.getHorario()});
+                    }
+                    jTablaDetalleDieta.setModel(mode);
+
+                }
+
+            }
+
+        });
+    }
+
+//                    filtros
     class FiltraEntrada5 extends DocumentFilter {
 
         public static final char SOLO_NUMEROS = 'N';
