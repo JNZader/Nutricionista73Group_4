@@ -116,9 +116,9 @@ public class ComidaDAO {
             ps.setInt(1, id);
             int updel = ps.executeUpdate();
             if (updel == 1) {
-                System.out.println("se ha eliminado la comida");
+                JOptionPane.showMessageDialog(null, "Se ha eliminado la comida", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                System.out.println("error al eliminar comida");
+                JOptionPane.showMessageDialog(null, "Error al eliminar comida", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);

@@ -97,7 +97,7 @@ public void guardarPaciente(Paciente paciente) {
             // Verificación del resultado de la ejecución
             int fila = ps.executeUpdate();
             if (fila == 1) {
-                JOptionPane.showMessageDialog(null, " Se eliminó el paciente.");
+                JOptionPane.showMessageDialog(null, " Se anulo el paciente.");
             } else {
                 JOptionPane.showMessageDialog(null, "El paciente no existe");
             }

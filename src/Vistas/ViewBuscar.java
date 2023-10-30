@@ -1341,7 +1341,7 @@ public class ViewBuscar extends javax.swing.JPanel {
                 jButtonBuscarActionPerformed(evt);
             } else if (selectedObject instanceof DietaComida) {
                 DietaComida dieta = (DietaComida) selectedObject;
-                dietaComidaDAO.anularDietaComida(dietCom.getId());
+                dietaComidaDAO.anularDietaComida(dieta.getId());
                 jButtonBuscarActionPerformed(evt);
             }
         }
