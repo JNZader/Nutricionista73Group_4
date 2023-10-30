@@ -116,9 +116,9 @@ public class ComidaDAO {
             ps.setInt(1, id);
             int updel = ps.executeUpdate();
             if (updel == 1) {
-                System.out.println("se ha eliminado la comida");
+                JOptionPane.showMessageDialog(null, "Se ha eliminado la comida", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                System.out.println("error al eliminar comida");
+                JOptionPane.showMessageDialog(null, "Error al eliminar comida", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
@@ -155,6 +155,9 @@ public class ComidaDAO {
 
                 comidas.add(comida);
             }
+            if (comidas.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "No se encontraron comidas.");
+            }
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(null, "Error al obtener comidas");
@@ -190,6 +193,9 @@ public class ComidaDAO {
                     calorias.setCantCalorias(rs.getInt("cantcalorias"));
                     calorias.setEstado(true);
                     comidas.add(calorias);
+                }
+                if (comidas.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "No se encontraron comidas con las calorias especificadas.");
                 }
             }
         } catch (SQLException ex) {

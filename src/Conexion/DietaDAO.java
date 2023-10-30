@@ -60,6 +60,10 @@ public class DietaDAO {
             ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(null, "Error al obtener Dietas");
         }
+        if (dietas.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se encontraron dietas.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
+        }
+
         return dietas;
     }
 
@@ -176,9 +180,9 @@ public class DietaDAO {
             ps.setInt(1, idDieta);
             int updel = ps.executeUpdate();
             if (updel == 1) {
-                System.out.println("se ha eliminado una Dieta");
+                JOptionPane.showMessageDialog(null, "Se ha anulado una Dieta", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                System.out.println("error al eliminar Dieta");
+                JOptionPane.showMessageDialog(null, "Error al anular Dieta", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
@@ -228,6 +232,10 @@ public class DietaDAO {
             ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(null, "Error al buscar dietas por fecha");
         }
+        if (dietas.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se encontraron dietas.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
+        }
+
         return dietas;
     }
 
@@ -271,6 +279,9 @@ public class DietaDAO {
             ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(null, "Error al buscar dietas por paciente");
         }
+        if (dietas.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se encontraron dietas.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
+        }
         return dietas;
     }
 
@@ -313,6 +324,9 @@ public class DietaDAO {
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(null, "Error al buscar dietas por nombre");
+        }
+        if (dietas.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se encontraron dietas.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
         }
         return dietas;
     }
@@ -358,6 +372,9 @@ public class DietaDAO {
             ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(null, "Error al buscar dietas por peso final");
         }
+        if (dietas.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se encontraron dietas.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
+        }
         return dietas;
     }
 
@@ -399,7 +416,7 @@ public class DietaDAO {
                 + "JOIN dieta d ON p.idPaciente = d.idPaciente "
                 + "JOIN consulta c ON p.idPaciente = c.idPaciente "
                 + "WHERE d.fechaFin <= CURDATE() "
-                +"AND (c.fecha IS NULL OR c.fecha = (SELECT MAX(fecha) FROM consulta WHERE idPaciente = p.idPaciente)) "
+                + "AND (c.fecha IS NULL OR c.fecha = (SELECT MAX(fecha) FROM consulta WHERE idPaciente = p.idPaciente)) "
                 + "AND c.pesoActual >= d.pesoFinal";
 
         try (PreparedStatement ps = con.prepareStatement(SQL_SELECT); ResultSet rs = ps.executeQuery()) {
@@ -420,32 +437,31 @@ public class DietaDAO {
 
         return pacientes;
     }
-    
-    
+
     public ArrayList<Dieta> listarDietas(boolean soloNoCumplidas) {
-    ArrayList<Dieta> dietas = new ArrayList<>();
-    
-    String sql = "SELECT d.idDieta FROM dieta d, paciente p " +
-                 "WHERE d.idPaciente = p.idPaciente " +
-                 "AND d.estado = 1 " +
-                 "AND p.estado = 1 " +
-                 (soloNoCumplidas ? "AND pesoFinal < pesoActual AND fechaFin <= ?" : "") +
-                 " ORDER BY d.fechaFin";
-    
-    try (PreparedStatement ps = con.prepareStatement(sql)) {
-        if (soloNoCumplidas) {
-            ps.setDate(1, Date.valueOf(LocalDate.now()));
-        }
-        
-        try (ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                dietas.add(buscarPorId(rs.getInt("idDieta"),1));
+        ArrayList<Dieta> dietas = new ArrayList<>();
+
+        String sql = "SELECT d.idDieta FROM dieta d, paciente p "
+                + "WHERE d.idPaciente = p.idPaciente "
+                + "AND d.estado = 1 "
+                + "AND p.estado = 1 "
+                + (soloNoCumplidas ? "AND pesoFinal < pesoActual AND fechaFin <= ?" : "")
+                + " ORDER BY d.fechaFin";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            if (soloNoCumplidas) {
+                ps.setDate(1, Date.valueOf(LocalDate.now()));
             }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    dietas.add(buscarPorId(rs.getInt("idDieta"), 1));
+                }
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla dieta " + ex.getMessage());
         }
-    } catch (SQLException ex) {
-        JOptionPane.showMessageDialog(null, "Error al acceder a la tabla dieta " + ex.getMessage());
+
+        return dietas;
     }
-    
-    return dietas;
-}
 }

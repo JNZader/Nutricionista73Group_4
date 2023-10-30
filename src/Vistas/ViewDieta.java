@@ -889,7 +889,9 @@ public class ViewDieta extends javax.swing.JPanel {
 
                 comidaDie.actualizar(dietaComida);
 
+
                 llenarTablaDetalleDieta(die);
+
             }
         } catch (NumberFormatException e) {
             e.printStackTrace(System.out);

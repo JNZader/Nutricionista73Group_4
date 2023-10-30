@@ -604,7 +604,8 @@ public class ViewBuscar extends javax.swing.JPanel {
             jButtonEliminar.setEnabled(false);
             jButtonAnular.setEnabled(false);
         }
-        if (jComboBoxEntidades.getSelectedIndex() == 2 && jComboBoxAtributos.getSelectedIndex() == 1) {
+        if (jComboBoxEntidades.getSelectedIndex() == 2 && jComboBoxAtributos.getSelectedIndex() == 1
+           ||jComboBoxEntidades.getSelectedIndex() == 2 && jComboBoxAtributos.getSelectedIndex() == 2) {
             jRadioButtonActivo.setEnabled(false);
             jRadioButtonAmbos.setEnabled(false);
             jRadioButtonInactivo.setEnabled(false);
@@ -1340,7 +1341,7 @@ public class ViewBuscar extends javax.swing.JPanel {
                 jButtonBuscarActionPerformed(evt);
             } else if (selectedObject instanceof DietaComida) {
                 DietaComida dieta = (DietaComida) selectedObject;
-                dietaComidaDAO.anularDietaComida(dietCom.getId());
+                dietaComidaDAO.anularDietaComida(dieta.getId());
                 jButtonBuscarActionPerformed(evt);
             }
         }

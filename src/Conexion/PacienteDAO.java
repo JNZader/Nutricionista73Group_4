@@ -97,7 +97,7 @@ public void guardarPaciente(Paciente paciente) {
             // Verificación del resultado de la ejecución
             int fila = ps.executeUpdate();
             if (fila == 1) {
-                JOptionPane.showMessageDialog(null, " Se eliminó el paciente.");
+                JOptionPane.showMessageDialog(null, " Se anulo el paciente.");
             } else {
                 JOptionPane.showMessageDialog(null, "El paciente no existe");
             }
@@ -146,6 +146,9 @@ public void guardarPaciente(Paciente paciente) {
             ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(null, " Error al acceder a la tabla paciente ");
         }
+        if (pacientes.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se encontraron pacientes.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
+        }
         return pacientes;
     }
 
@@ -179,7 +182,7 @@ public void guardarPaciente(Paciente paciente) {
                     paciente.setPesoActual(rs.getDouble("pesoActual"));
                     paciente.setEstado(rs.getBoolean("estado"));
                 } else {
-                    JOptionPane.showMessageDialog(null, "No existe el paciente");
+                JOptionPane.showMessageDialog(null, "No se encontró ningún paciente con DNI " + dni, "Paciente no encontrado", JOptionPane.WARNING_MESSAGE);
                 }
             }
         } catch (SQLException ex) {
@@ -264,7 +267,9 @@ public void guardarPaciente(Paciente paciente) {
             ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla paciente");
         }
-
+        if (pacientes.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se encontraron pacientes.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
+        }
         return pacientes;
     }
 
@@ -304,7 +309,9 @@ public void guardarPaciente(Paciente paciente) {
             ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla paciente");
         }
-
+        if (pacientes.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se encontraron pacientes.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
+        }
         return pacientes;
     }
     
@@ -344,7 +351,9 @@ public void guardarPaciente(Paciente paciente) {
             ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla paciente");
         }
-
+        if (pacientes.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se encontraron pacientes.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
+        }
         return pacientes;
     }
 
@@ -385,6 +394,9 @@ public void guardarPaciente(Paciente paciente) {
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(null, "Error al buscar pacientes por peso actual");
+        }
+        if (pacientes.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se encontraron pacientes.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
         }
         return pacientes;
     }
