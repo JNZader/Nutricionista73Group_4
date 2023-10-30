@@ -36,14 +36,14 @@ public class DietaComidaDAO {
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
                     dietacomida.setId(rs.getInt(1));
-                    JOptionPane.showMessageDialog(null, "DietaComida inscripta");
+                    JOptionPane.showMessageDialog(null, "Dieta inscripta");
                 } else {
                     JOptionPane.showMessageDialog(null, "Inscripcion fallida");
                 }
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
-            JOptionPane.showMessageDialog(null, "Error al insertar DietaComida");
+            JOptionPane.showMessageDialog(null, "Error al insertar Dieta");
         }
         return dietacomida;
     }
@@ -67,25 +67,6 @@ public class DietaComidaDAO {
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(null, "Error al actualizar Dieta");
-        }
-    }
-
-    public void eliminarDietaComida(int idDietaComida) {
-
-        String sql = "UPDATE  dietaComida SET estado = 0 Where idDietaComida = ?";
-
-        try (PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, idDietaComida);
-
-            int on = ps.executeUpdate();
-            if (on > 0) {
-                JOptionPane.showMessageDialog(null, "DietaComida eliminada!!");
-            } else {
-                JOptionPane.showMessageDialog(null, "Eliminacion fallida");
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace(System.err);
-            JOptionPane.showMessageDialog(null, "Error al eliminar Dieta");
         }
     }
 
@@ -130,10 +111,10 @@ public class DietaComidaDAO {
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
-            JOptionPane.showMessageDialog(null, "Error al obtener DietasComidas");
+            JOptionPane.showMessageDialog(null, "Error al obtener Dietas");
         }
         if (dietaComidas.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "No se encontraron DietasComidas.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "No se encontraron Dietas.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
         }
         return dietaComidas;
     }
@@ -174,12 +155,12 @@ public class DietaComidaDAO {
                     dietaComida.setPorcion(rs.getInt("porcion"));
                     dietaComida.setHorario(Horario.valueOf(rs.getString("horario")));
                 } else {
-                    JOptionPane.showMessageDialog(null, "No se encontró ninguna DietaComida con ese ID.", "DietaComida no encontrada", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "No se encontró ninguna Dieta con ese ID.", "DietaComida no encontrada", JOptionPane.WARNING_MESSAGE);
                 }
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
-            JOptionPane.showMessageDialog(null, "Error al obtener la DietaComida por ID");
+            JOptionPane.showMessageDialog(null, "Error al obtener la Dieta por ID");
         }
         return dietaComida;
     }
@@ -227,10 +208,10 @@ public class DietaComidaDAO {
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
-            JOptionPane.showMessageDialog(null, "Error al obtener DietasComidas por ID de Dieta");
+            JOptionPane.showMessageDialog(null, "Error al obtener Dietas por ID de Tratamiento");
         }
         if (dietaComidas.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "No se encontraron DietasComidas.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "No se encontraron Dietas", "Sin resultados", JOptionPane.WARNING_MESSAGE);
         }
         return dietaComidas;
     }
@@ -281,10 +262,10 @@ public class DietaComidaDAO {
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
-            JOptionPane.showMessageDialog(null, "Error al buscar DietasComidas por porción");
+            JOptionPane.showMessageDialog(null, "Error al buscar Dietas por porción");
         }
         if (dietaComidas.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "No se encontraron DietasComidas.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "No se encontraron Dietas.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
         }
         return dietaComidas;
     }
@@ -332,10 +313,10 @@ public class DietaComidaDAO {
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
-            JOptionPane.showMessageDialog(null, "Error al buscar DietasComidas por idComida");
+            JOptionPane.showMessageDialog(null, "Error al buscar Dietas por idComida");
         }
         if (dietaComidas.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "No se encontraron DietasComidas.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "No se encontraron Dietas", "Sin resultados", JOptionPane.WARNING_MESSAGE);
         }
         return dietaComidas;
     }
@@ -383,10 +364,10 @@ public class DietaComidaDAO {
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
-            JOptionPane.showMessageDialog(null, "Error al buscar DietasComidas por horario");
+            JOptionPane.showMessageDialog(null, "Error al buscar Dietas por horario");
         }
         if (dietaComidas.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "No se encontraron DietasComidas.", "Sin resultados", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "No se encontraron Dietas", "Sin resultados", JOptionPane.WARNING_MESSAGE);
         }
         return dietaComidas;
     }
@@ -399,13 +380,31 @@ public class DietaComidaDAO {
 
             int rowsUpdated = ps.executeUpdate();
             if (rowsUpdated > 0) {
-                JOptionPane.showMessageDialog(null, "DietaComida anulada con éxito");
+                JOptionPane.showMessageDialog(null, "Dieta anulada con éxito");
             } else {
-                JOptionPane.showMessageDialog(null, "No se pudo anular la DietaComida");
+                JOptionPane.showMessageDialog(null, "No se pudo anular");
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
-            JOptionPane.showMessageDialog(null, "Error al anular la DietaComida");
+            JOptionPane.showMessageDialog(null, "Error al anular la Dieta");
+        }
+    }
+
+    public void eliminarDietaComida(int idDietaComida) {
+        String SQL_DELETE = "DELETE FROM dietacomida WHERE iddietacomida = ?";
+
+        try (PreparedStatement ps = con.prepareStatement(SQL_DELETE)) {
+            ps.setInt(1, idDietaComida);
+
+            int rowsDeleted = ps.executeUpdate();
+            if (rowsDeleted > 0) {
+                JOptionPane.showMessageDialog(null, "Dieta eliminada con éxito");
+            } else {
+                JOptionPane.showMessageDialog(null, "No se pudo eliminar la Dieta");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.err);
+            JOptionPane.showMessageDialog(null, "Error al eliminar la Dieta");
         }
     }
 }
