@@ -180,9 +180,9 @@ public class DietaDAO {
             ps.setInt(1, idDieta);
             int updel = ps.executeUpdate();
             if (updel == 1) {
-                System.out.println("se ha eliminado una Dieta");
+                JOptionPane.showMessageDialog(null, "Se ha anulado una Dieta", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                System.out.println("error al eliminar Dieta");
+                JOptionPane.showMessageDialog(null, "Error al anular Dieta", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
@@ -461,7 +461,7 @@ public class DietaDAO {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla dieta " + ex.getMessage());
         }
-        
+
         return dietas;
     }
 }
