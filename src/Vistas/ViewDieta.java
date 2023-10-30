@@ -359,7 +359,6 @@ public class ViewDieta extends javax.swing.JPanel {
         jtnombre = new javax.swing.JTextField();
         jBGuardar = new javax.swing.JButton();
         jbAgregar = new javax.swing.JButton();
-        jbEliminar = new javax.swing.JButton();
         jbSalir = new javax.swing.JButton();
         jlPesofinal = new javax.swing.JLabel();
         jtpesofinal = new javax.swing.JTextField();
@@ -430,16 +429,6 @@ public class ViewDieta extends javax.swing.JPanel {
         jbAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbAgregarActionPerformed(evt);
-            }
-        });
-
-        jbEliminar.setBackground(new java.awt.Color(150, 200, 130));
-        jbEliminar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jbEliminar.setForeground(new java.awt.Color(0, 0, 51));
-        jbEliminar.setText("Eliminar");
-        jbEliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbEliminarActionPerformed(evt);
             }
         });
 
@@ -596,11 +585,8 @@ public class ViewDieta extends javax.swing.JPanel {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jButtonModif))
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 718, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jbEliminar)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jbSalir))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jbSalir)
                                 .addComponent(jScrollPaneDetalle, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 718, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -656,9 +642,7 @@ public class ViewDieta extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPaneDetalle, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbEliminar)
-                    .addComponent(jbSalir))
+                .addComponent(jbSalir)
                 .addGap(40, 40, 40))
         );
 
@@ -698,50 +682,6 @@ public class ViewDieta extends javax.swing.JPanel {
             llenarTablaDietaDisponibles();
             limpiarTodo();
         }
-
-//    }                                         
-//    private void jbEliminarActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
-//       DietaDAO diet= new DietaDAO ();
-//       Dieta dieta = new Dieta();
-//      int id = Integer.parseInt(jTid.getText());
-//       
-//        
-//        if (dieta != null) {// Si encontro un alumno usa el metodo eliminar de aluData para eliminarlo de la base de datos
-//
-//            diet.eliminarDieta(dieta.getIdDieta());
-//            // Limpia los campos de texto y demas componentes
-////            ((Abstract
-//Document) jTid.getDocument()).setDocumentFilter(null);
-//            jTid.setText("");
-//        try {
-//            // 1. Crear una instancia de la clase DietaDAO (o la clase correspondiente).
-//            DietaDAO dietaDAO = new DietaDAO();
-//
-//            // 2. Obtener el valor del campo ID.
-//            int id = Integer.parseInt(jTid.getText());
-//            String tf = jTid.getText();
-//
-//            if (tf == null && tf.isEmpty()) {
-//                JOptionPane.showMessageDialog(this, "El campo ID está vacío.", "Error", JOptionPane.ERROR_MESSAGE);
-//                return;
-//            }
-//
-//            // 3. Utilizar el método para buscar la dieta por ID.
-//            Dieta dieta = dietaDAO.buscarPorId(id, 1);
-//
-//            // 4. Si se encontró la dieta, eliminarla.
-//            if (dieta != null) {
-//                dietaDAO.eliminarDieta(dieta.getIdDieta());
-//                JOptionPane.showMessageDialog(this, "La dieta se eliminó con éxito.");
-//            } else {
-//                JOptionPane.showMessageDialog(this, "La dieta no se encontró en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
-//            }
-////
-//        
-//         
-//     }
-
     }//GEN-LAST:event_jBGuardarActionPerformed
 
     private void jbAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAgregarActionPerformed
@@ -777,70 +717,6 @@ public class ViewDieta extends javax.swing.JPanel {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jbAgregarActionPerformed
-
-    private void jbEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEliminarActionPerformed
-        // TODO add your handling code here:
-//       DietaDAO diet= new DietaDAO ();
-//       Dieta dieta = new Dieta();
-//      int id = Integer.parseInt(jTid.getText());
-//       
-//        
-//        if (dieta != null) {// Si encontro un alumno usa el metodo eliminar de aluData para eliminarlo de la base de datos
-//
-//            diet.eliminarDieta(dieta.getIdDieta());
-//            // Limpia los campos de texto y demas componentes
-////            ((Abstract
-//Document) jTid.getDocument()).setDocumentFilter(null);
-//            jTid.setText("");
-
-//        try {
-//            // 1. Crear una instancia de la clase DietaDAO (o la clase correspondiente).
-//            DietaDAO dietaDAO = new DietaDAO();
-//
-//            // 2. Obtener el valor del campo ID.
-//            int id = Integer.parseInt(jTid.getText());
-//            String tf = jTid.getText();
-//
-//            if (tf == null && tf.isEmpty()) {
-//                JOptionPane.showMessageDialog(this, "El campo ID está vacío.", "Error", JOptionPane.ERROR_MESSAGE);
-//                return;
-//            }
-//
-//            // 3. Utilizar el método para buscar la dieta por ID.
-//            Dieta dieta = dietaDAO.buscarPorId(id, 1);
-//
-//            // 4. Si se encontró la dieta, eliminarla.
-//            if (dieta != null) {
-//                dietaDAO.eliminarDieta(dieta.getIdDieta());
-//                JOptionPane.showMessageDialog(this, "La dieta se eliminó con éxito.");
-//            } else {
-//                JOptionPane.showMessageDialog(this, "La dieta no se encontró en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
-//            }
-//
-//            // 5. Limpiar los campos y realizar otras acciones necesarias.
-//            jTid.setText("");
-//            jtnombre.setText("");
-//            jComboPaciente.setSelectedIndex(0); // Puedes establecer el índice que corresponde a la opción predeterminada
-//            jDChoFeInicial.setDate(null);
-//            jdatechoFechaFinal.setDate(null);
-//            jCboxEstado.setSelected(false);
-//            jtpesofinal.setText("");
-//            // ... otros campos
-//        } catch (NumberFormatException e) {
-//            JOptionPane.showMessageDialog(this, "El campo ID debe ser un número entero válido.", "Error", JOptionPane.ERROR_MESSAGE);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            JOptionPane.showMessageDialog(this, "Ocurrió un error al eliminar la dieta.", "Error", JOptionPane.ERROR_MESSAGE);
-//        }
-//            jtnombre.setText("");
-//            jComboPaciente.setSelectedItem(null);
-//            jCboxEstado.setSelected(false);
-//            jDChoFeInicial.setDate(null);
-//            jdatechoFechaFinal.setDate(null);
-//            jtpesofinal.setText("");
-//        
-
-    }//GEN-LAST:event_jbEliminarActionPerformed
 
     private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
         Dashboardv2 db = new Dashboardv2();
@@ -966,7 +842,6 @@ public class ViewDieta extends javax.swing.JPanel {
     private javax.swing.JTable jTablaDetalleDieta;
     private javax.swing.JTable jTablaDietaDispo;
     private javax.swing.JButton jbAgregar;
-    private javax.swing.JButton jbEliminar;
     private javax.swing.JButton jbModificar;
     private javax.swing.JButton jbSalir;
     private com.toedter.calendar.JDateChooser jdatechoFechaFinal;
