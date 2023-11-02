@@ -744,7 +744,6 @@ public class ViewDieta extends javax.swing.JPanel {
     }//GEN-LAST:event_jButtonModifActionPerformed
 
     private void jbModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarActionPerformed
-        actualizarTablaDos();
         try {
             DietaComidaDAO comidaDie = new DietaComidaDAO();
             DietaDAO dietaDAO = new DietaDAO();
@@ -767,24 +766,8 @@ public class ViewDieta extends javax.swing.JPanel {
                 comidaDie.actualizar(dietaComida);
 
 
-                llenarTablaDetalleDieta(dietaComida.getDieta());
+                llenarTablaDetalleDieta(die);
 
-            }else{
-                //DietaComida dietaComida = (DietaComida) jTablaDetalleDieta.getValueAt(selectedRow, 4);
-                DietaComida dietaComida; 
-                // Realizar la actualización
-                int porcion = Integer.parseInt(jtfPorcion.getText());
-                Comida comidas = (Comida) jComboBoxComidas.getSelectedItem();
-                Horario horarios = (Horario) jComboBoxHorario.getSelectedItem();
-                dietaComida = new DietaComida(dietCom.getId(), comidas,dietCom.getDieta(), porcion, horarios, true);
-                dietaComida.setPorcion(porcion);
-                dietaComida.setComida(comidas);
-                dietaComida.setHorario(horarios);
-
-                comidaDie.actualizar(dietaComida);
-
-
-                llenarTablaDetalleDieta(dietaComida.getDieta());
             }
         } catch (NumberFormatException e) {
             e.printStackTrace(System.out);
