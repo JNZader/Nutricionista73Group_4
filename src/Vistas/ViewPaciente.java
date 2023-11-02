@@ -12,24 +12,23 @@ import javax.swing.text.DocumentFilter;
 
 public class ViewPaciente extends javax.swing.JPanel {
 
-    private DocumentFilter filtroMix, filtroLetras, filtroNum;
+    private DocumentFilter filtroMix, filtroLetras;
     private NumericRangeFilter6 fp;
     PacienteDAO pd = new PacienteDAO();
+//    private ImageIcon imagen;
+//    private Icon icono;
 
     public ViewPaciente() {
         initComponents();
         jBModificar.setEnabled(false);
         jBEliminar.setEnabled(false);
+        ViewBuscar VB = new ViewBuscar();
         filtroMix = new FiltraEntrada6(FiltraEntrada6.NUM_LETRAS);
-        filtroNum = new FiltraEntrada6(FiltraEntrada6.SOLO_NUMEROS);
         filtroLetras = new FiltraEntrada6(FiltraEntrada6.SOLO_LETRAS);
         ((AbstractDocument) jTDomicilio.getDocument()).setDocumentFilter(filtroMix);
         ((AbstractDocument) jTNombre.getDocument()).setDocumentFilter(filtroLetras);
-        ((AbstractDocument) jTDni.getDocument()).setDocumentFilter(filtroNum);
-        ((AbstractDocument) jTTelefono.getDocument()).setDocumentFilter(filtroNum);
         fp = new NumericRangeFilter6();
         ((AbstractDocument) jTPesoActual.getDocument()).setDocumentFilter(fp);
-
         jTID.setEditable(false);
     }
 
@@ -53,6 +52,7 @@ public class ViewPaciente extends javax.swing.JPanel {
         } else {
             jChEstado.setSelected(false);
         }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -409,6 +409,7 @@ public class ViewPaciente extends javax.swing.JPanel {
     private void jBBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBBuscarActionPerformed
         Paciente paciente = new Paciente();
         try {
+
             if (jTDni.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "El campo dni esta vacio");
             } else {
@@ -426,6 +427,7 @@ public class ViewPaciente extends javax.swing.JPanel {
                 jBModificar.setEnabled(true);
                 jBEliminar.setEnabled(true);
             }
+
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "Debe ingresar datos validos");
         } catch (NullPointerException ex) {
@@ -443,10 +445,13 @@ public class ViewPaciente extends javax.swing.JPanel {
     }//GEN-LAST:event_jBLimpiarActionPerformed
 
     private void jTNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTNombreKeyTyped
+        // TODO add your handling code here:
         char c = evt.getKeyChar();
+
         if (Character.isDigit(c)) {
             evt.consume();
         }
+
         if (Character.isLetter(c)) {
             if (jTNombre.getText().length() >= 100) {
                 evt.consume();
@@ -464,6 +469,7 @@ public class ViewPaciente extends javax.swing.JPanel {
     }//GEN-LAST:event_jTNombreKeyTyped
 
     private void jTDniKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTDniKeyTyped
+        // TODO add your handling code here:
         char c = evt.getKeyChar();
 
         if (!Character.isDigit(c)) {
@@ -491,10 +497,12 @@ public class ViewPaciente extends javax.swing.JPanel {
     }//GEN-LAST:event_jTDomicilioKeyTyped
 
     private void jTTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTTelefonoKeyTyped
+        // TODO add your handling code here:
         char c = evt.getKeyChar();
         if (!Character.isDigit(c)) {
             evt.consume();
         }
+
         if (jTTelefono.getText().length() >= 9) {
             evt.consume();
         }
@@ -535,24 +543,16 @@ public class ViewPaciente extends javax.swing.JPanel {
     private javax.swing.JTextField jTTelefono;
     // End of variables declaration//GEN-END:variables
  public void limpiar() {
-        ((AbstractDocument) jTDomicilio.getDocument()).setDocumentFilter(null);
-        ((AbstractDocument) jTNombre.getDocument()).setDocumentFilter(null);
-        ((AbstractDocument) jTDni.getDocument()).setDocumentFilter(null);
-        ((AbstractDocument) jTTelefono.getDocument()).setDocumentFilter(null);
-        ((AbstractDocument) jTPesoActual.getDocument()).setDocumentFilter(null);
         jTNombre.setText("");
         jTDni.setText("");
         jTDomicilio.setText("");
         jTTelefono.setText("");
+        ((AbstractDocument) jTPesoActual.getDocument()).setDocumentFilter(null);
         jTPesoActual.setText("");
+        ((AbstractDocument) jTPesoActual.getDocument()).setDocumentFilter(fp);
         jChEstado.setSelected(false);
         jTID.setText("");
         jTID.setEditable(false);
-        ((AbstractDocument) jTDomicilio.getDocument()).setDocumentFilter(filtroMix);
-        ((AbstractDocument) jTNombre.getDocument()).setDocumentFilter(filtroLetras);
-        ((AbstractDocument) jTDni.getDocument()).setDocumentFilter(filtroNum);
-        ((AbstractDocument) jTTelefono.getDocument()).setDocumentFilter(filtroNum);
-        ((AbstractDocument) jTPesoActual.getDocument()).setDocumentFilter(fp);
     }
 
     class FiltraEntrada6 extends DocumentFilter {
@@ -630,6 +630,7 @@ public class ViewPaciente extends javax.swing.JPanel {
             char[] letras = valor.toCharArray();
             boolean valido = false;
             for (int i = 0; i < letras.length; i++) {
+
                 switch (tipoEntrada) {
                     case SOLO_NUMEROS:
                         return valor.matches("[0-9]+");// verifica si solo contiene numeros
@@ -651,9 +652,12 @@ public class ViewPaciente extends javax.swing.JPanel {
         @Override
         public void replace(DocumentFilter.FilterBypass fb, int i, int i1, String string, AttributeSet as) throws BadLocationException {
             String currentText = fb.getDocument().getText(0, fb.getDocument().getLength());//obtiene el texto actual del jtf
+
             String nextText = currentText.substring(0, i) + string + currentText.substring(i + i1);//concatena el texto a insertar con el texto acutal
+
             try {
                 double num = Double.parseDouble(nextText);//intenta convertir el texto en numero
+
                 if (num >= 0.0 && num <= 500.0) {//verifica si el numero esta en el rango de 0.0 a 10.0
                     super.replace(fb, i, i1, string, as);
                 } else {
@@ -665,4 +669,5 @@ public class ViewPaciente extends javax.swing.JPanel {
             }
         }
     }
+
 }

@@ -14,6 +14,7 @@ import Entidades.Paciente;
 import com.toedter.calendar.JTextFieldDateEditor;
 import java.awt.Toolkit;
 import java.awt.event.ItemEvent;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -315,7 +316,7 @@ public class ViewBuscar extends javax.swing.JPanel {
                             if (aux.isEstado()) {
                                 filas[6] = "Activo";
                             } else {
-                                filas[6] = "Inactivo";
+                                filas[5] = "Inactivo";
                             }
                             modDietaComida.addRow(filas);
                         }
@@ -361,7 +362,7 @@ public class ViewBuscar extends javax.swing.JPanel {
             if (dietaComida.isEstado()) {
                 filas[6] = "Activo";
             } else {
-                filas[6] = "Inactivo";
+                filas[5] = "Inactivo";
             }
             modDietaComida.addRow(filas);;
         }
