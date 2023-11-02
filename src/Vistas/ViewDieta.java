@@ -11,8 +11,6 @@ import Entidades.Horario;
 import Entidades.Paciente;
 import com.toedter.calendar.JTextFieldDateEditor;
 import java.awt.Toolkit;
-import static java.awt.image.ImageObserver.ERROR;
-import static java.awt.image.ImageObserver.WIDTH;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.Date;
@@ -101,6 +99,7 @@ public class ViewDieta extends javax.swing.JPanel {
         ((AbstractDocument) jtpesofinal.getDocument()).setDocumentFilter(fpf);
 
         listSelection();
+        jBGuardar.setEnabled(true);
     }
 
     public ViewDieta(Dieta dieta) {
@@ -113,6 +112,7 @@ public class ViewDieta extends javax.swing.JPanel {
         jdatechoFechaFinal.setDate(Date.valueOf(die.getFechaFinal()));
         jtpesofinal.setText(die.getPesoFinal() + "");
         jCbEstado.setSelected(die.isEstado());
+        jBGuardar.setEnabled(false);
     }
 
     public ViewDieta(DietaComida dietaComida) {
@@ -120,6 +120,8 @@ public class ViewDieta extends javax.swing.JPanel {
         this.dietCom = dietaComida;
         jbModificar.setEnabled(true);
         cargarDatosDietaComida();
+        jBGuardar.setEnabled(false);
+        jbAgregar.setEnabled(false);
     }
 
     private void cargarDatosDietaComida() {
@@ -517,6 +519,7 @@ public class ViewDieta extends javax.swing.JPanel {
 
         jbModificar.setBackground(new java.awt.Color(150, 200, 130));
         jbModificar.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jbModificar.setForeground(new java.awt.Color(51, 51, 51));
         jbModificar.setText("Modificar");
         jbModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -741,6 +744,7 @@ public class ViewDieta extends javax.swing.JPanel {
         }
         jButtonModif.setEnabled(false);
         limpiarTodo();
+        jBGuardar.setEnabled(true);
     }//GEN-LAST:event_jButtonModifActionPerformed
 
     private void jbModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarActionPerformed
@@ -793,6 +797,8 @@ public class ViewDieta extends javax.swing.JPanel {
         }
         jbModificar.setEnabled(false);
         limpiarTodo();
+        jbAgregar.setEnabled(true);
+        jBGuardar.setEnabled(true);
     }//GEN-LAST:event_jbModificarActionPerformed
 
     private void jtnombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtnombreKeyTyped

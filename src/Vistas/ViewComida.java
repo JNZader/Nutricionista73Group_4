@@ -10,9 +10,11 @@ import Entidades.Comida;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.DocumentFilter;
 
 public class ViewComida extends javax.swing.JPanel {
-
+    private DocumentFilter filtroMix, filtroLetras, filtroNum;
     private ComidaDAO ComiData;
     private DefaultTableModel mod;
     private Comida comidaActual;
@@ -25,6 +27,10 @@ public class ViewComida extends javax.swing.JPanel {
         checkActivos.setSelected(true);
         ListSelectionModel selectionModel = tablaComida.getSelectionModel();
         selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+               ((AbstractDocument) jTdetalleComida.getDocument()).setDocumentFilter(filtroMix);
+        ((AbstractDocument) jTcantCalorias.getDocument()).setDocumentFilter(filtroNum);
+        ((AbstractDocument) jTnombreComida.getDocument()).setDocumentFilter(filtroLetras);
     }
 
     public ViewComida(Comida comida) {
